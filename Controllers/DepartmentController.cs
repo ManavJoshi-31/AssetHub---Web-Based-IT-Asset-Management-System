@@ -135,4 +135,22 @@ public class DepartmentController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    // POST: /Department/ToggleStatus/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleStatus(int id)
+    {
+        var department = await _context.Departments.FindAsync(id);
+
+        if (department == null)
+            return NotFound();
+
+        department.IsActive = !department.IsActive;
+        department.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
 }

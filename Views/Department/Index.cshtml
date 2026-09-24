@@ -56,11 +56,30 @@
                                 }
                             </td>
                             <td>
-                                <a asp-action="Edit"
-                                   asp-route-id="@department.DepartmentId"
-                                   class="btn btn-sm btn-outline-primary">
-                                    Edit
-                                </a>
+                                <div class="d-flex gap-2">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@department.DepartmentId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+
+                                    <form asp-action="ToggleStatus"
+                                          asp-route-id="@department.DepartmentId"
+                                          method="post">
+
+                                        <button type="submit"
+                                                class="btn btn-sm @(department.IsActive
+                                                                    ? "btn-outline-danger"
+                                                                    : "btn-outline-success")">
+
+                                            @(department.IsActive ? "Deactivate" : "Activate")
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
                             </td>
                         </tr>
                     }
