@@ -1,0 +1,95 @@
+﻿@model IEnumerable<AssetHub.ViewModels.EmployeeListViewModel>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Employees</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Add Employee
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No employees have been created yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Employee Code</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Job Title</th>
+                        <th>Joining Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td>@employee.EmployeeCode</td>
+
+                            <td>
+                                @employee.FirstName @employee.LastName
+                            </td>
+
+                            <td>@employee.Email</td>
+
+                            <td>@employee.DepartmentName</td>
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(employee.JobTitle)
+                                    ? "-"
+                                    : employee.JobTitle)
+                            </td>
+
+                            <td>
+                                @employee.DateOfJoining.ToString("dd-MM-yyyy")
+                            </td>
+
+                            <td>
+                                @if (employee.IsActive)
+                                {
+                                    <span class="badge bg-success">
+                                        @employee.EmploymentStatus
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        @employee.EmploymentStatus
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-action="Edit"
+                                   asp-route-id="@employee.EmployeeId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+
+</div>

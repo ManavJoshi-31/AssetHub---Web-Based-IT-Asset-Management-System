@@ -1,0 +1,202 @@
+﻿@model AssetHub.ViewModels.EmployeeViewModel
+@using AssetHub.Models.Enums
+
+@{
+    ViewData["Title"] = "Edit Employee";
+    var departments = ViewBag.Departments as List<AssetHub.Models.Department>;
+}
+
+<div class="container mt-4">
+
+    <div class="row">
+        <div class="col-md-8 col-lg-7">
+
+            <h2 class="mb-4">Edit Employee</h2>
+
+            <form asp-action="Edit" method="post">
+
+                <input type="hidden" asp-for="EmployeeId" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EmployeeCode"
+                           class="form-label"></label>
+
+                    <input asp-for="EmployeeCode"
+                           class="form-control" />
+
+                    <span asp-validation-for="EmployeeCode"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FirstName"
+                               class="form-label"></label>
+
+                        <input asp-for="FirstName"
+                               class="form-control" />
+
+                        <span asp-validation-for="FirstName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LastName"
+                               class="form-label"></label>
+
+                        <input asp-for="LastName"
+                               class="form-control" />
+
+                        <span asp-validation-for="LastName"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email"
+                           class="form-label"></label>
+
+                    <input asp-for="Email"
+                           class="form-control" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber"
+                           class="form-label"></label>
+
+                    <input asp-for="PhoneNumber"
+                           class="form-control" />
+
+                    <span asp-validation-for="PhoneNumber"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DepartmentId"
+                           class="form-label"></label>
+
+                    <select asp-for="DepartmentId"
+                            class="form-select">
+
+                        <option value="">-- Select Department --</option>
+
+                        @if (departments != null)
+                        {
+                            foreach (var department in departments)
+                            {
+                                <option value="@department.DepartmentId">
+                                    @department.DepartmentName
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                    <span asp-validation-for="DepartmentId"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="JobTitle"
+                           class="form-label"></label>
+
+                    <input asp-for="JobTitle"
+                           class="form-control" />
+
+                    <span asp-validation-for="JobTitle"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfJoining"
+                           class="form-label"></label>
+
+                    <input asp-for="DateOfJoining"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="DateOfJoining"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DateOfLeaving"
+                           class="form-label"></label>
+
+                    <input asp-for="DateOfLeaving"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="DateOfLeaving"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EmploymentStatus"
+                           class="form-label"></label>
+
+                    <select asp-for="EmploymentStatus"
+                            asp-items="Html.GetEnumSelectList<EmploymentStatus>()"
+                            class="form-select">
+                    </select>
+
+                    <span asp-validation-for="EmploymentStatus"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address"
+                           class="form-label"></label>
+
+                    <textarea asp-for="Address"
+                              class="form-control"
+                              rows="3"></textarea>
+
+                    <span asp-validation-for="Address"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label">
+                    </label>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Save Changes
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
