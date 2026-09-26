@@ -1,0 +1,82 @@
+﻿@model IEnumerable<AssetHub.ViewModels.AssetCategoryViewModel>
+
+@{
+    ViewData["Title"] = "Asset Categories";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Asset Categories</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Add Category
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No asset categories have been created yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Category Code</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>@category.CategoryCode</td>
+
+                            <td>@category.CategoryName</td>
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(category.Description)
+                                    ? "-"
+                                    : category.Description)
+                            </td>
+
+                            <td>
+                                @if (category.IsActive)
+                                {
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-action="Edit"
+                                   asp-route-id="@category.AssetCategoryId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+
+</div>
