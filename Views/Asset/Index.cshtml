@@ -106,12 +106,20 @@ else
                         </td>
 
                         <td>
-                            <a asp-action="Edit"
-                               asp-route-id="@asset.AssetId"
-                               class="btn btn-sm btn-outline-primary">
-                                Edit
-                            </a>
-                        </td>
+    <div class="d-flex gap-1">
+        <a asp-action="Edit"
+           asp-route-id="@asset.AssetId"
+           class="btn btn-sm btn-outline-primary">
+            Edit
+        </a>
+
+        <a asp-action="ChangeStatus"
+           asp-route-id="@asset.AssetId"
+           class="btn btn-sm btn-outline-secondary">
+            Status
+        </a>
+    </div>
+</td>
                     </tr>
                 }
             </tbody>

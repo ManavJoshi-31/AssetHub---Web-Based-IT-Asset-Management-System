@@ -5,6 +5,7 @@ using AssetHub.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AssetHub.Controllers;
 
@@ -335,5 +336,94 @@ public class AssetController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
+    }
+
+
+    private static List<SelectListItem> GetAllowedStatusTransitions(
+    AssetStatus currentStatus)
+    {
+        return currentStatus switch
+        {
+            AssetStatus.Available =>
+                new List<SelectListItem>
+                {
+                new SelectListItem
+                {
+                    Value = AssetStatus.Retired.ToString(),
+                    Text = "Retired"
+                },
+                new SelectListItem
+                {
+                    Value = AssetStatus.Lost.ToString(),
+                    Text = "Lost"
+                }
+                },
+
+            _ => new List<SelectListItem>()
+        };
+    }
+
+
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeStatus(
+    int id,
+    AssetStatusViewModel viewModel)
+    {
+        if (id != viewModel.AssetId)
+        {
+            return BadRequest();
+        }
+
+        var asset = await _context.Assets
+            .FirstOrDefaultAsync(a => a.AssetId == id);
+
+        if (asset == null)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(viewModel);
+        }
+
+        if (!IsValidStatusTransition(asset.AssetStatus, viewModel.NewStatus))
+        {
+            ModelState.AddModelError(
+    nameof(viewModel.NewStatus),
+    $"The asset cannot be changed from {asset.AssetStatus} to {viewModel.NewStatus}.");
+
+            ViewBag.AllowedStatuses = GetAllowedStatusTransitions(asset.AssetStatus);
+
+            return View(viewModel);
+        }
+
+        asset.AssetStatus = viewModel.NewStatus;
+        asset.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    private static bool IsValidStatusTransition(
+    AssetStatus currentStatus,
+    AssetStatus newStatus)
+    {
+        if (currentStatus == newStatus)
+        {
+            return false;
+        }
+
+        return currentStatus switch
+        {
+            AssetStatus.Available =>
+                newStatus == AssetStatus.Retired ||
+                newStatus == AssetStatus.Lost,
+
+            _ => false
+        };
     }
 }
