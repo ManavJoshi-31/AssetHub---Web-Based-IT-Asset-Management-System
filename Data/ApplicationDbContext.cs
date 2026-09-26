@@ -117,6 +117,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(a => a.AssetTag)
             .IsUnique();
 
+        modelBuilder.Entity<Asset>()
+            .HasIndex(a => a.SerialNumber)
+            .IsUnique();
+
         // Decimal precision
         modelBuilder.Entity<Asset>()
             .Property(a => a.PurchaseCost)
