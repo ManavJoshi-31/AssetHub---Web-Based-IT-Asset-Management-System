@@ -364,6 +364,33 @@ public class AssetController : Controller
     }
 
 
+    // GET: /Asset/ChangeStatus/5
+    [HttpGet]
+    public async Task<IActionResult> ChangeStatus(int id)
+    {
+        var asset = await _context.Assets
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.AssetId == id);
+
+        if (asset == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new AssetStatusViewModel
+        {
+            AssetId = asset.AssetId,
+            AssetTag = asset.AssetTag,
+            AssetName = asset.AssetName,
+            CurrentStatus = asset.AssetStatus
+        };
+
+        ViewBag.AllowedStatuses =
+            GetAllowedStatusTransitions(asset.AssetStatus);
+
+        return View(viewModel);
+    }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -425,5 +452,28 @@ public class AssetController : Controller
 
             _ => false
         };
+    }
+
+
+
+    // POST: /Asset/ToggleActive/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleActive(int id)
+    {
+        var asset = await _context.Assets
+            .FirstOrDefaultAsync(a => a.AssetId == id);
+
+        if (asset == null)
+        {
+            return NotFound();
+        }
+
+        asset.IsActive = !asset.IsActive;
+        asset.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 }
