@@ -1,4 +1,5 @@
 ﻿using AssetHub.Data;
+using AssetHub.Models;
 using AssetHub.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,5 +33,51 @@ public class AssetCategoryController : Controller
             .ToListAsync();
 
         return View(categories);
+    }
+
+
+
+    // GET: /AssetCategory/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: /AssetCategory/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(AssetCategoryViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        bool categoryCodeExists = await _context.AssetCategories
+            .AnyAsync(c => c.CategoryCode == model.CategoryCode);
+
+        if (categoryCodeExists)
+        {
+            ModelState.AddModelError(
+                nameof(model.CategoryCode),
+                "Category code already exists.");
+
+            return View(model);
+        }
+
+        var category = new AssetCategory
+        {
+            CategoryName = model.CategoryName,
+            CategoryCode = model.CategoryCode,
+            Description = model.Description,
+            IsActive = model.IsActive,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.AssetCategories.Add(category);
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 }
