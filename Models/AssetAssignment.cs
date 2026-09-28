@@ -1,4 +1,6 @@
-﻿namespace AssetHub.Models;
+﻿using AssetHub.Models.Enums;
+
+namespace AssetHub.Models;
 
 public class AssetAssignment
 {
@@ -19,7 +21,7 @@ public class AssetAssignment
     public string? AssignmentNotes { get; set; }
 
     public string? ReturnNotes { get; set; }
-
+    public AssetCondition? ReturnCondition { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
