@@ -8,6 +8,8 @@ public class Asset
 
     public string AssetTag { get; set; } = string.Empty;
 
+    public string AssetName { get; set; } = string.Empty;
+
     public string? SerialNumber { get; set; }
 
     public int AssetCategoryId { get; set; }
@@ -24,6 +26,8 @@ public class Asset
 
     public string? Vendor { get; set; }
 
+    public string? InvoiceNumber { get; set; }
+
     public string? Location { get; set; }
 
     public AssetStatus AssetStatus { get; set; } = AssetStatus.Available;
@@ -35,6 +39,8 @@ public class Asset
     public DateTime? RetirementDate { get; set; }
 
     public string? Notes { get; set; }
+
+    public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; set; }
 
