@@ -1,0 +1,81 @@
+﻿using AssetHub.Data;
+using AssetHub.Models;
+using AssetHub.Models.Enums;
+using Microsoft.EntityFrameworkCore;
+
+namespace AssetHub.Services;
+
+public class MaintenanceService
+{
+    private readonly ApplicationDbContext _context;
+
+    public MaintenanceService(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<(bool Success, string? ErrorMessage)> CreateMaintenanceAsync(
+        int assetId,
+        MaintenanceType maintenanceType,
+        string? description,
+        DateTime startDate,
+        string? vendor,
+        decimal? cost,
+        string? technicianName,
+        string? notes)
+    {
+        var asset = await _context.Assets
+            .FirstOrDefaultAsync(a => a.AssetId == assetId);
+
+        if (asset == null)
+        {
+            return (false, "Asset not found.");
+        }
+
+        if (!asset.IsActive)
+        {
+            return (false, "This asset is inactive and cannot be placed into maintenance.");
+        }
+
+        if (asset.AssetStatus != AssetStatus.Available)
+        {
+            return (false, "Only available assets can be placed into maintenance.");
+        }
+
+        var now = DateTime.UtcNow;
+
+        var maintenance = new MaintenanceRecord
+        {
+            AssetId = assetId,
+            MaintenanceType = maintenanceType,
+            Description = description,
+            StartDate = startDate,
+            Status = MaintenanceStatus.Open,
+            Vendor = vendor,
+            Cost = cost,
+            TechnicianName = technicianName,
+            Notes = notes,
+            CreatedAt = now
+        };
+
+        var statusHistory = new AssetStatusHistory
+        {
+            AssetId = asset.AssetId,
+            OldStatus = asset.AssetStatus.ToString(),
+            NewStatus = AssetStatus.Maintenance.ToString(),
+            ChangedAt = now,
+            Reason = "Asset placed into maintenance.",
+            Notes = description
+        };
+
+        asset.AssetStatus = AssetStatus.Maintenance;
+        asset.UpdatedAt = now;
+
+        _context.MaintenanceRecords.Add(maintenance);
+        _context.AssetStatusHistories.Add(statusHistory);
+
+        await _context.SaveChangesAsync();
+
+        return (true, null);
+    }
+}
