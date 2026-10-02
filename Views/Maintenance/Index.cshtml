@@ -1,0 +1,99 @@
+﻿@model IEnumerable<AssetHub.Models.MaintenanceRecord>
+
+@{
+    ViewData["Title"] = "Maintenance Records";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Maintenance Records</h2>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+            Create Maintenance
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No maintenance records found.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered">
+
+                <thead>
+                    <tr>
+                        <th>Asset ID</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Vendor</th>
+                        <th>Cost</th>
+                        <th>Technician</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var maintenance in Model)
+                    {
+                        <tr>
+                            <td>@maintenance.AssetId</td>
+
+                            <td>
+                                @maintenance.MaintenanceType
+                            </td>
+
+                            <td>
+                                @maintenance.Description
+                            </td>
+
+                            <td>
+                                @maintenance.StartDate.ToString("dd-MM-yyyy")
+                            </td>
+
+                            <td>
+                                @(maintenance.EndDate?.ToString("dd-MM-yyyy") ?? "-")
+                            </td>
+
+                            <td>
+                                @maintenance.Status
+                            </td>
+
+                            <td>
+                                @(maintenance.Vendor ?? "-")
+                            </td>
+
+                            <td>
+                                @(maintenance.Cost?.ToString("0.00") ?? "-")
+                            </td>
+
+                            <td>
+                                @(maintenance.TechnicianName ?? "-")
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>

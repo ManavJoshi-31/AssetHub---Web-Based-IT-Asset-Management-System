@@ -21,7 +21,15 @@ public class MaintenanceController : Controller
         _context = context;
         _maintenanceService = maintenanceService;
     }
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var maintenanceRecords = await _context.MaintenanceRecords
+            .OrderByDescending(m => m.StartDate)
+            .ToListAsync();
 
+        return View(maintenanceRecords);
+    }
     [HttpGet]
     public async Task<IActionResult> Create()
     {
