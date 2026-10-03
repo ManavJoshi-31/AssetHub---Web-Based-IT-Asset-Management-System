@@ -4,7 +4,6 @@ using AssetHub.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetHub.Services;
-
 public class MaintenanceService
 {
     private readonly ApplicationDbContext _context;
@@ -160,7 +159,6 @@ public class MaintenanceService
         var maintenance = await _context.MaintenanceRecords
             .FirstOrDefaultAsync(m =>
                 m.MaintenanceRecordId == maintenanceRecordId);
-
         if (maintenance == null)
         {
             return (false, "Maintenance record not found.");
