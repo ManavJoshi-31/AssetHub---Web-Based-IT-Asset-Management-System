@@ -30,6 +30,23 @@ public class MaintenanceController : Controller
 
         return View(maintenanceRecords);
     }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Start(int id)
+    {
+        var result = await _maintenanceService.StartMaintenanceAsync(id);
+
+        if (!result.Success)
+        {
+            TempData["ErrorMessage"] = result.ErrorMessage;
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["SuccessMessage"] =
+            "Maintenance has been started successfully.";
+
+        return RedirectToAction(nameof(Index));
+    }
     [HttpGet]
     public async Task<IActionResult> Create()
     {
