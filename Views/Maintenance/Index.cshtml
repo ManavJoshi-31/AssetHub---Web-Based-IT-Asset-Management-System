@@ -21,7 +21,12 @@
             @TempData["SuccessMessage"]
         </div>
     }
-
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     @if (!Model.Any())
     {
         <div class="alert alert-info">
@@ -45,6 +50,7 @@
                         <th>Vendor</th>
                         <th>Cost</th>
                         <th>Technician</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -85,6 +91,30 @@
 
                             <td>
                                 @(maintenance.TechnicianName ?? "-")
+                            </td>
+                            <td>
+                                @if (maintenance.Status == AssetHub.Models.Enums.MaintenanceStatus.Open)
+                                {
+                                    <form asp-action="Start"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@maintenance.MaintenanceRecordId" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-primary">
+                                            Start
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
                             </td>
                         </tr>
                     }

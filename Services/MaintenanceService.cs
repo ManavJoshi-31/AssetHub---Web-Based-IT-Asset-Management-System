@@ -78,4 +78,28 @@ public class MaintenanceService
 
         return (true, null);
     }
+    public async Task<(bool Success, string? ErrorMessage)> StartMaintenanceAsync(
+    int maintenanceRecordId)
+    {
+        var maintenance = await _context.MaintenanceRecords
+            .FirstOrDefaultAsync(m =>
+                m.MaintenanceRecordId == maintenanceRecordId);
+
+        if (maintenance == null)
+        {
+            return (false, "Maintenance record not found.");
+        }
+
+        if (maintenance.Status != MaintenanceStatus.Open)
+        {
+            return (false, "Only open maintenance records can be started.");
+        }
+
+        maintenance.Status = MaintenanceStatus.InProgress;
+        maintenance.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return (true, null);
+    }
 }
