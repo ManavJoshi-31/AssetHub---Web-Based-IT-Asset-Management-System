@@ -172,8 +172,35 @@ public class MaintenanceService
             return (false, "Only open or in-progress maintenance can be cancelled.");
         }
 
+        var asset = await _context.Assets
+            .FirstOrDefaultAsync(a => a.AssetId == maintenance.AssetId);
+
+        if (asset == null)
+        {
+            return (false, "Asset not found.");
+        }
+
+        var now = DateTime.UtcNow;
+
         maintenance.Status = MaintenanceStatus.Cancelled;
-        maintenance.UpdatedAt = DateTime.UtcNow;
+        maintenance.UpdatedAt = now;
+
+        var oldStatus = asset.AssetStatus;
+
+        asset.AssetStatus = AssetStatus.Available;
+        asset.UpdatedAt = now;
+
+        var statusHistory = new AssetStatusHistory
+        {
+            AssetId = asset.AssetId,
+            OldStatus = oldStatus.ToString(),
+            NewStatus = AssetStatus.Available.ToString(),
+            ChangedAt = now,
+            Reason = "Maintenance cancelled.",
+            Notes = maintenance.Notes
+        };
+
+        _context.AssetStatusHistories.Add(statusHistory);
 
         await _context.SaveChangesAsync();
 
