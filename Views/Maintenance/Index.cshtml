@@ -111,6 +111,24 @@
                                         </button>
                                     </form>
                                 }
+                                else if (maintenance.Status == AssetHub.Models.Enums.MaintenanceStatus.InProgress)
+                                {
+                                    <form asp-action="Complete"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@maintenance.MaintenanceRecordId" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-success">
+                                            Complete
+                                        </button>
+                                    </form>
+                                }
                                 else
                                 {
                                     <span class="text-muted">-</span>
