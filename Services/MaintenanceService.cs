@@ -102,4 +102,56 @@ public class MaintenanceService
 
         return (true, null);
     }
+    public async Task<(bool Success, string? ErrorMessage)> CompleteMaintenanceAsync(
+    int maintenanceRecordId)
+    {
+        var maintenance = await _context.MaintenanceRecords
+            .FirstOrDefaultAsync(m =>
+                m.MaintenanceRecordId == maintenanceRecordId);
+
+        if (maintenance == null)
+        {
+            return (false, "Maintenance record not found.");
+        }
+
+        if (maintenance.Status != MaintenanceStatus.InProgress)
+        {
+            return (false, "Only maintenance records in progress can be completed.");
+        }
+
+        var asset = await _context.Assets
+            .FirstOrDefaultAsync(a => a.AssetId == maintenance.AssetId);
+
+        if (asset == null)
+        {
+            return (false, "Asset not found.");
+        }
+
+        var now = DateTime.UtcNow;
+
+        maintenance.Status = MaintenanceStatus.Completed;
+        maintenance.EndDate = now;
+        maintenance.UpdatedAt = now;
+
+        var oldStatus = asset.AssetStatus;
+
+        asset.AssetStatus = AssetStatus.Available;
+        asset.UpdatedAt = now;
+
+        var statusHistory = new AssetStatusHistory
+        {
+            AssetId = asset.AssetId,
+            OldStatus = oldStatus.ToString(),
+            NewStatus = AssetStatus.Available.ToString(),
+            ChangedAt = now,
+            Reason = "Maintenance completed.",
+            Notes = maintenance.Notes
+        };
+
+        _context.AssetStatusHistories.Add(statusHistory);
+
+        await _context.SaveChangesAsync();
+
+        return (true, null);
+    }
 }
