@@ -21,6 +21,7 @@ public class MaintenanceController : Controller
         _context = context;
         _maintenanceService = maintenanceService;
     }
+
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -62,6 +63,24 @@ public class MaintenanceController : Controller
 
         TempData["SuccessMessage"] =
             "Maintenance has been completed successfully.";
+
+        return RedirectToAction(nameof(Index));
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(int id)
+    {
+        var result =
+            await _maintenanceService.CancelMaintenanceAsync(id);
+
+        if (!result.Success)
+        {
+            TempData["ErrorMessage"] = result.ErrorMessage;
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["SuccessMessage"] =
+            "Maintenance has been cancelled successfully.";
 
         return RedirectToAction(nameof(Index));
     }

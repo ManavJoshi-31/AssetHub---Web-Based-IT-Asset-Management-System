@@ -154,4 +154,29 @@ public class MaintenanceService
 
         return (true, null);
     }
+    public async Task<(bool Success, string? ErrorMessage)> CancelMaintenanceAsync(
+    int maintenanceRecordId)
+    {
+        var maintenance = await _context.MaintenanceRecords
+            .FirstOrDefaultAsync(m =>
+                m.MaintenanceRecordId == maintenanceRecordId);
+
+        if (maintenance == null)
+        {
+            return (false, "Maintenance record not found.");
+        }
+
+        if (maintenance.Status != MaintenanceStatus.Open &&
+            maintenance.Status != MaintenanceStatus.InProgress)
+        {
+            return (false, "Only open or in-progress maintenance can be cancelled.");
+        }
+
+        maintenance.Status = MaintenanceStatus.Cancelled;
+        maintenance.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return (true, null);
+    }
 }
