@@ -47,6 +47,24 @@ public class MaintenanceController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Complete(int id)
+    {
+        var result =
+            await _maintenanceService.CompleteMaintenanceAsync(id);
+
+        if (!result.Success)
+        {
+            TempData["ErrorMessage"] = result.ErrorMessage;
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["SuccessMessage"] =
+            "Maintenance has been completed successfully.";
+
+        return RedirectToAction(nameof(Index));
+    }
     [HttpGet]
     public async Task<IActionResult> Create()
     {
