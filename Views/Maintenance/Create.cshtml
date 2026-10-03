@@ -1,0 +1,151 @@
+﻿@model AssetHub.ViewModels.MaintenanceViewModel
+
+@{
+    ViewData["Title"] = "Create Maintenance";
+}
+
+<div class="container mt-4">
+    <h2>Create Maintenance Record</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="Create" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="AssetId" class="form-label"></label>
+
+            <select asp-for="AssetId"
+                    asp-items="ViewBag.Assets"
+                    class="form-select">
+
+                <option value="">-- Select Asset --</option>
+
+            </select>
+
+            <span asp-validation-for="AssetId"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MaintenanceType"
+                   class="form-label"></label>
+
+            <select asp-for="MaintenanceType"
+                    class="form-select">
+
+                <option value="">-- Select Maintenance Type --</option>
+                <option value="Repair">Repair</option>
+                <option value="PreventiveMaintenance">
+                    Preventive Maintenance
+                </option>
+                <option value="Inspection">Inspection</option>
+                <option value="Upgrade">Upgrade</option>
+                <option value="Replacement">Replacement</option>
+                <option value="Other">Other</option>
+
+            </select>
+
+            <span asp-validation-for="MaintenanceType"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description"
+                   class="form-label"></label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="4"></textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StartDate"
+                   class="form-label"></label>
+
+            <input asp-for="StartDate"
+                   type="date"
+                   class="form-control" />
+
+            <span asp-validation-for="StartDate"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Vendor"
+                   class="form-label"></label>
+
+            <input asp-for="Vendor"
+                   class="form-control" />
+
+            <span asp-validation-for="Vendor"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Cost"
+                   class="form-label"></label>
+
+            <input asp-for="Cost"
+                   type="number"
+                   step="0.01"
+                   class="form-control" />
+
+            <span asp-validation-for="Cost"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="TechnicianName"
+                   class="form-label"></label>
+
+            <input asp-for="TechnicianName"
+                   class="form-control" />
+
+            <span asp-validation-for="TechnicianName"
+                  class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Notes"
+                   class="form-label"></label>
+
+            <textarea asp-for="Notes"
+                      class="form-control"
+                      rows="4"></textarea>
+
+            <span asp-validation-for="Notes"
+                  class="text-danger"></span>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Create Maintenance
+        </button>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
