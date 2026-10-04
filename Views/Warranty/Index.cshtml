@@ -1,60 +1,254 @@
 ﻿@model IEnumerable<AssetHub.Models.Warranty>
 @inject AssetHub.Services.WarrantyService WarrantyService
+
 @{
     ViewData["Title"] = "Warranties";
 }
 
-<h1>Warranties</h1>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Warranties</h1>
+        <p class="text-muted mb-0">
+            Track warranty coverage for your organization's assets.
+        </p>
+    </div>
 
+    <a asp-action="Create"
+       class="btn btn-primary">
+        + Create Warranty
+    </a>
+</div>
+
+
+<!-- Success Message -->
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
         @TempData["SuccessMessage"]
     </div>
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">
-        Create Warranty
-    </a>
-</p>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        No warranties found.
+    <!-- Empty State -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body text-center py-5">
+
+            <div class="fs-1 mb-3">
+                🛡️
+            </div>
+
+            <h5 class="fw-semibold">
+                No warranties found
+            </h5>
+
+            <p class="text-muted mb-4">
+                No warranty records have been created yet.
+            </p>
+
+            <a asp-action="Create"
+               class="btn btn-primary">
+                + Create Warranty
+            </a>
+
+        </div>
+
     </div>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Asset ID</th>
-                <th>Warranty Type</th>
-                <th>Provider</th>
-                <th>Warranty Number</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
+    <!-- Warranty Table -->
+    <div class="card border-0 shadow-sm">
 
-        <tbody>
-            @foreach (var warranty in Model)
-            {
-                var status = WarrantyService.GetWarrantyStatus(warranty.EndDate);
+        <div class="card-body border-bottom">
 
-                <tr>
-                    <td>@warranty.AssetId</td>
-                    <td>@warranty.WarrantyType</td>
-                    <td>@warranty.Provider</td>
-                    <td>@warranty.WarrantyNumber</td>
-                    <td>@warranty.StartDate.ToString("dd MMM yyyy")</td>
-                    <td>@warranty.EndDate.ToString("dd MMM yyyy")</td>
-                    <td>@status</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h5 class="fw-semibold mb-1">
+                        Warranty Records
+                    </h5>
+
+                    <small class="text-muted">
+                        Showing @Model.Count() warranty record(s)
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th class="ps-4">
+                            Asset
+                        </th>
+
+                        <th>
+                            Warranty Type
+                        </th>
+
+                        <th>
+                            Provider
+                        </th>
+
+                        <th>
+                            Warranty Number
+                        </th>
+
+                        <th>
+                            Start Date
+                        </th>
+
+                        <th>
+                            End Date
+                        </th>
+
+                        <th class="pe-4">
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var warranty in Model)
+                    {
+                        var status =
+                            WarrantyService.GetWarrantyStatus(warranty.EndDate);
+
+                        <tr>
+
+                            <!-- Asset -->
+                            <td class="ps-4">
+
+                                <span class="fw-semibold">
+                                    Asset #@warranty.AssetId
+                                </span>
+
+                            </td>
+
+
+                            <!-- Type -->
+                            <td>
+
+                                <span class="badge bg-primary-subtle text-primary">
+                                    @warranty.WarrantyType
+                                </span>
+
+                            </td>
+
+
+                            <!-- Provider -->
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(warranty.Provider))
+                                {
+                                    @warranty.Provider
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Warranty Number -->
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(warranty.WarrantyNumber))
+                                {
+                                    <code>
+                                        @warranty.WarrantyNumber
+                                    </code>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Start Date -->
+                            <td>
+                                @warranty.StartDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <!-- End Date -->
+                            <td>
+                                @warranty.EndDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <!-- Status -->
+                            <td class="pe-4">
+
+                                @switch (status)
+                                {
+                                    case AssetHub.Models.Enums.WarrantyStatus.Active:
+
+                                        <span class="badge bg-success-subtle text-success">
+                                            Active
+                                        </span>
+
+                                        break;
+
+                                    case AssetHub.Models.Enums.WarrantyStatus.ExpiringSoon:
+
+                                        <span class="badge bg-warning-subtle text-warning-emphasis">
+                                            Expiring Soon
+                                        </span>
+
+                                        break;
+
+                                    case AssetHub.Models.Enums.WarrantyStatus.Expired:
+
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            Expired
+                                        </span>
+
+                                        break;
+
+                                    default:
+
+                                        <span class="badge bg-secondary-subtle text-secondary">
+                                            @status
+                                        </span>
+
+                                        break;
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 }
