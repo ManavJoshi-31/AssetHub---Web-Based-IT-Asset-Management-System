@@ -1,0 +1,60 @@
+﻿@model IEnumerable<AssetHub.Models.Warranty>
+@inject AssetHub.Services.WarrantyService WarrantyService
+@{
+    ViewData["Title"] = "Warranties";
+}
+
+<h1>Warranties</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Create Warranty
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No warranties found.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Asset ID</th>
+                <th>Warranty Type</th>
+                <th>Provider</th>
+                <th>Warranty Number</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var warranty in Model)
+            {
+                var status = WarrantyService.GetWarrantyStatus(warranty.EndDate);
+
+                <tr>
+                    <td>@warranty.AssetId</td>
+                    <td>@warranty.WarrantyType</td>
+                    <td>@warranty.Provider</td>
+                    <td>@warranty.WarrantyNumber</td>
+                    <td>@warranty.StartDate.ToString("dd MMM yyyy")</td>
+                    <td>@warranty.EndDate.ToString("dd MMM yyyy")</td>
+                    <td>@status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
