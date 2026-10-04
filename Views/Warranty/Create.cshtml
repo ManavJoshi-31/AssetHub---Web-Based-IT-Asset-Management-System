@@ -1,0 +1,383 @@
+﻿@model AssetHub.ViewModels.WarrantyViewModel
+
+@{
+    ViewData["Title"] = "Create Warranty";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Create Warranty</h1>
+        <p class="text-muted mb-0">
+            Add warranty coverage for an asset.
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to Warranties
+    </a>
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<div class="row">
+
+    <!-- Warranty Form -->
+    <div class="col-xl-8 col-lg-10">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold mb-1">
+                        Warranty Details
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Enter the warranty information for the selected asset.
+                    </p>
+                </div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+
+
+                    <!-- Asset -->
+                    <div class="mb-4">
+
+                        <label asp-for="AssetId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="AssetId"
+                                asp-items="ViewBag.Assets"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Asset --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Select the asset covered by this warranty.
+                        </div>
+
+                        <span asp-validation-for="AssetId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Warranty Type -->
+                    <div class="mb-4">
+
+                        <label asp-for="WarrantyType"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="WarrantyType"
+                                asp-items="Html.GetEnumSelectList<AssetHub.Models.Enums.WarrantyType>()"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Warranty Type --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="WarrantyType"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Dates -->
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+
+                            <label asp-for="StartDate"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="StartDate"
+                                   type="date"
+                                   class="form-control form-control-lg" />
+
+                            <span asp-validation-for="StartDate"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="EndDate"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="EndDate"
+                                   type="date"
+                                   class="form-control form-control-lg" />
+
+                            <span asp-validation-for="EndDate"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Provider -->
+                    <div class="mb-4">
+
+                        <label asp-for="Provider"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Provider"
+                               class="form-control"
+                               placeholder="Warranty provider" />
+
+                        <span asp-validation-for="Provider"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Warranty Number -->
+                    <div class="mb-4">
+
+                        <label asp-for="WarrantyNumber"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="WarrantyNumber"
+                               class="form-control"
+                               placeholder="Warranty or contract number" />
+
+                        <span asp-validation-for="WarrantyNumber"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Terms -->
+                    <div class="mb-4">
+
+                        <label asp-for="TermsAndConditions"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="TermsAndConditions"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Enter warranty terms and conditions...">
+                        </textarea>
+
+                        <span asp-validation-for="TermsAndConditions"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+
+                        <label asp-for="Notes"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="Notes"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Add any additional warranty notes...">
+                        </textarea>
+
+                        <span asp-validation-for="Notes"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-2 pt-2">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Create Warranty
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Information Card -->
+    <div class="col-xl-4 col-lg-10 mt-4 mt-xl-0">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-semibold mb-3">
+                    Warranty Information
+                </h5>
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        Select the asset
+                    </div>
+
+                    <small class="text-muted">
+                        Choose the asset that is covered by the warranty.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        Set the coverage period
+                    </div>
+
+                    <small class="text-muted">
+                        The end date must be after the start date.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        Add provider details
+                    </div>
+
+                    <small class="text-muted">
+                        Record the warranty provider and warranty number.
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold">
+                        Keep the terms documented
+                    </div>
+
+                    <small class="text-muted">
+                        Store important warranty terms and additional notes.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Status Information -->
+        <div class="card border-0 shadow-sm mt-3">
+
+            <div class="card-body p-4">
+
+                <h6 class="fw-semibold mb-3">
+                    Warranty Status
+                </h6>
+
+                <div class="mb-2">
+
+                    <span class="badge bg-success-subtle text-success">
+                        Active
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        More than 30 days remaining.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-2">
+
+                    <span class="badge bg-warning-subtle text-warning-emphasis">
+                        Expiring Soon
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        Within 30 days of expiry.
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <span class="badge bg-danger-subtle text-danger">
+                        Expired
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        End date has passed.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

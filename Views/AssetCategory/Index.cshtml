@@ -1,0 +1,110 @@
+@model IEnumerable<AssetHub.ViewModels.AssetCategoryViewModel>
+
+@{
+    ViewData["Title"] = "Asset Categories";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Asset Categories</h1>
+        <p class="text-muted mb-0">
+            Define equipment classifications, device types, and hardware categories.
+        </p>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-tag-fill me-1"></i>
+        <span>Add Category</span>
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <div class="metric-icon-box icon-box-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                <i class="bi bi-tags"></i>
+            </div>
+            <h5 class="fw-bold mb-1">No categories found</h5>
+            <p class="text-muted mb-4">No asset categories have been defined yet.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-tag-fill me-1"></i>
+                <span>Create Your First Category</span>
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body border-bottom py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Category Directory</h5>
+                <span class="badge bg-primary-subtle text-primary">@Model.Count() Categories</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Category Code</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <span class="badge bg-secondary-subtle">
+                                    @category.CategoryCode
+                                </span>
+                            </td>
+
+                            <td class="fw-bold text-dark">
+                                @category.CategoryName
+                            </td>
+
+                            <td class="text-muted">
+                                @(string.IsNullOrWhiteSpace(category.Description)
+                                    ? "-"
+                                    : category.Description)
+                            </td>
+
+                            <td>
+                                @if (category.IsActive)
+                                {
+                                    <span class="badge bg-success-subtle">
+                                        <span class="status-dot" style="width: 6px; height: 6px;"></span>
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-end pe-4">
+                                <a asp-action="Edit"
+                                   asp-route-id="@category.AssetCategoryId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    <span>Edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

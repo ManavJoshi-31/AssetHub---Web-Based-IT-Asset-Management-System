@@ -1,0 +1,300 @@
+﻿@model AssetHub.ViewModels.AssetReturnViewModel
+
+@{
+    ViewData["Title"] = "Return Asset";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Return Asset</h1>
+        <p class="text-muted mb-0">
+            Return an assigned asset and record its condition.
+        </p>
+    </div>
+
+    <a asp-controller="Asset"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to Assets
+    </a>
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<div class="row">
+
+    <!-- Return Form -->
+    <div class="col-xl-8 col-lg-10">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold mb-1">
+                        Return Details
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Select the assigned asset and record its condition when returned.
+                    </p>
+                </div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+
+
+                    <!-- Asset -->
+                    <div class="mb-4">
+
+                        <label asp-for="AssetId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="AssetId"
+                                asp-items="ViewBag.Assets"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Assigned Asset --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Only currently assigned assets are shown.
+                        </div>
+
+                        <span asp-validation-for="AssetId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Condition -->
+                    <div class="mb-4">
+
+                        <label asp-for="ReturnCondition"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="ReturnCondition"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Condition --
+                            </option>
+
+                            <option value="Good">
+                                Good
+                            </option>
+
+                            <option value="Fair">
+                                Fair
+                            </option>
+
+                            <option value="Damaged">
+                                Damaged
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Record the asset's condition at the time of return.
+                        </div>
+
+                        <span asp-validation-for="ReturnCondition"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+
+                        <label asp-for="ReturnNotes"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="ReturnNotes"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Enter any relevant return notes...">
+                        </textarea>
+
+                        <span asp-validation-for="ReturnNotes"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-2 pt-2">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Return Asset
+                        </button>
+
+                        <a asp-controller="Asset"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Information Card -->
+    <div class="col-xl-4 col-lg-10 mt-4 mt-xl-0">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-semibold mb-3">
+                    Return Process
+                </h5>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        1. Select an asset
+                    </div>
+
+                    <small class="text-muted">
+                        Choose an asset that is currently assigned.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        2. Check condition
+                    </div>
+
+                    <small class="text-muted">
+                        Record whether the asset is in good, fair, or damaged condition.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        3. Add notes
+                    </div>
+
+                    <small class="text-muted">
+                        Record any useful information about the return.
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold">
+                        4. Complete return
+                    </div>
+
+                    <small class="text-muted">
+                        The asset status will be updated automatically based on its condition.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Condition Information -->
+        <div class="card border-0 shadow-sm mt-3">
+
+            <div class="card-body p-4">
+
+                <h6 class="fw-semibold mb-3">
+                    Condition Guide
+                </h6>
+
+                <div class="mb-2">
+                    <span class="badge bg-success-subtle text-success">
+                        Good
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        No significant issues.
+                    </small>
+                </div>
+
+
+                <div class="mb-2">
+                    <span class="badge bg-warning-subtle text-warning-emphasis">
+                        Fair
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        Normal wear or minor issues.
+                    </small>
+                </div>
+
+
+                <div>
+                    <span class="badge bg-danger-subtle text-danger">
+                        Damaged
+                    </span>
+
+                    <small class="text-muted ms-2">
+                        Requires maintenance.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

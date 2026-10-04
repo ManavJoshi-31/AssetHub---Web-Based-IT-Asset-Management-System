@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AssetHub</title>
+    <meta name="description" content="AssetHub - Modern Web-Based IT Asset Management System" />
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    
+    <!-- Luminous Theme Stylesheet -->
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+</head>
+<body class="auth-body">
+    <div class="page-shell">
+        <!-- Top Modern Navigation Bar -->
+        <header class="top-navbar">
+            <a asp-controller="Home" asp-action="Index" class="brand-anchor">
+                <div class="brand-icon-box">
+                    <i class="bi bi-box-seam-fill"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="brand-name">AssetHub</span>
+                    <span class="brand-badge-pill">ITAM</span>
+                </div>
+            </a>
+
+            <div class="nav-actions">
+                <div class="system-status-indicator">
+                    <span class="status-dot"></span>
+                    <span>Systems Operational</span>
+                </div>
+
+                @if (ViewContext.RouteData.Values["action"]?.ToString() == "Login")
+                {
+                    <a asp-controller="Home" asp-action="Index" class="btn-nav-outline">
+                        <i class="bi bi-house"></i>
+                        <span>Home</span>
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="btn-nav-outline">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        <span>Sign In</span>
+                    </a>
+                }
+            </div>
+        </header>
+
+        <!-- Main Body Content -->
+        <main role="main" class="main-wrapper">
+            @RenderBody()
+        </main>
+
+        <!-- Full-Width Modern Footer -->
+        <footer class="site-footer">
+            <div class="footer-trust-badge">
+                <i class="bi bi-shield-check"></i>
+                <span>SOC-2 Type II Certified Architecture &bull; 256-Bit SSL Secured</span>
+            </div>
+
+            <div class="footer-nav">
+                <span>&copy; @DateTime.UtcNow.Year AssetHub Inc.</span>
+                <span>&bull;</span>
+                <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                <span>&bull;</span>
+                <a href="#terms">Terms of Service</a>
+                <span>&bull;</span>
+                <a href="#support">IT Support</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/auth.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,421 @@
+﻿@model IEnumerable<AssetHub.Models.MaintenanceRecord>
+
+@{
+    ViewData["Title"] = "Maintenance";
+}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Maintenance</h1>
+        <p class="text-muted mb-0">
+            Track repairs, inspections, upgrades, and other maintenance work.
+        </p>
+    </div>
+
+    <a asp-action="Create"
+       class="btn btn-primary">
+        + Create Maintenance
+    </a>
+</div>
+
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<!-- Error Message -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger border-0 shadow-sm mb-4">
+        <strong>Error:</strong>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+@if (!Model.Any())
+{
+    <!-- Empty State -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body text-center py-5">
+
+            <div class="fs-1 mb-3">
+                🔧
+            </div>
+
+            <h5 class="fw-semibold">
+                No maintenance records
+            </h5>
+
+            <p class="text-muted mb-4">
+                There are currently no maintenance records to display.
+            </p>
+
+            <a asp-action="Create"
+               class="btn btn-primary">
+                + Create Maintenance
+            </a>
+
+        </div>
+
+    </div>
+}
+else
+{
+    <!-- Maintenance Table -->
+    <div class="card border-0 shadow-sm">
+
+        <!-- Table Header -->
+        <div class="card-body border-bottom">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h5 class="fw-semibold mb-1">
+                        Maintenance Records
+                    </h5>
+
+                    <small class="text-muted">
+                        Showing @Model.Count() record(s)
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th class="ps-4">
+                            Asset
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Start Date
+                        </th>
+
+                        <th>
+                            End Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Vendor
+                        </th>
+
+                        <th>
+                            Cost
+                        </th>
+
+                        <th>
+                            Technician
+                        </th>
+
+                        <th class="text-end pe-4">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var maintenance in Model)
+                    {
+                        <tr>
+
+                            <!-- Asset -->
+                            <td class="ps-4">
+
+                                <span class="fw-semibold">
+                                    Asset #@maintenance.AssetId
+                                </span>
+
+                            </td>
+
+
+                            <!-- Type -->
+                            <td>
+
+                                <span class="badge bg-primary-subtle text-primary">
+                                    @maintenance.MaintenanceType
+                                </span>
+
+                            </td>
+
+
+                            <!-- Description -->
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(maintenance.Description))
+                                {
+                                    <span>
+                                        @maintenance.Description
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Start Date -->
+                            <td>
+
+                                @maintenance.StartDate.ToString("dd MMM yyyy")
+
+                            </td>
+
+
+                            <!-- End Date -->
+                            <td>
+
+                                @if (maintenance.EndDate.HasValue)
+                                {
+                                    @maintenance.EndDate.Value.ToString("dd MMM yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Status -->
+                            <td>
+
+                                @switch (maintenance.Status)
+                                {
+                                    case AssetHub.Models.Enums.MaintenanceStatus.Open:
+
+                                        <span class="badge bg-warning-subtle text-warning-emphasis">
+                                            Open
+                                        </span>
+
+                                        break;
+
+                                    case AssetHub.Models.Enums.MaintenanceStatus.InProgress:
+
+                                        <span class="badge bg-primary-subtle text-primary">
+                                            In Progress
+                                        </span>
+
+                                        break;
+
+                                    case AssetHub.Models.Enums.MaintenanceStatus.Completed:
+
+                                        <span class="badge bg-success-subtle text-success">
+                                            Completed
+                                        </span>
+
+                                        break;
+
+                                    case AssetHub.Models.Enums.MaintenanceStatus.Cancelled:
+
+                                        <span class="badge bg-secondary-subtle text-secondary">
+                                            Cancelled
+                                        </span>
+
+                                        break;
+
+                                    default:
+
+                                        <span class="badge bg-secondary-subtle text-secondary">
+                                            @maintenance.Status
+                                        </span>
+
+                                        break;
+                                }
+
+                            </td>
+
+
+                            <!-- Vendor -->
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(maintenance.Vendor))
+                                {
+                                    @maintenance.Vendor
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Cost -->
+                            <td>
+
+                                @if (maintenance.Cost.HasValue)
+                                {
+                                    @maintenance.Cost.Value.ToString("0.00")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Technician -->
+                            <td>
+
+                                @if (!string.IsNullOrWhiteSpace(maintenance.TechnicianName))
+                                {
+                                    @maintenance.TechnicianName
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- Actions -->
+                            <td class="pe-4">
+
+                                <div class="d-flex justify-content-end gap-1">
+
+                                    @if (maintenance.Status ==
+                                        AssetHub.Models.Enums.MaintenanceStatus.Open)
+                                    {
+                                        <form asp-action="Start"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@maintenance.MaintenanceRecordId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                Start
+                                            </button>
+
+                                        </form>
+
+
+                                        <form asp-action="Cancel"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@maintenance.MaintenanceRecordId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                Cancel
+                                            </button>
+
+                                        </form>
+                                    }
+                                    else if (maintenance.Status ==
+                                             AssetHub.Models.Enums.MaintenanceStatus.InProgress)
+                                    {
+                                        <form asp-action="Complete"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@maintenance.MaintenanceRecordId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-success">
+                                                Complete
+                                            </button>
+
+                                        </form>
+
+
+                                        <form asp-action="Cancel"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@maintenance.MaintenanceRecordId" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                Cancel
+                                            </button>
+
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">
+                                            No actions
+                                        </span>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}

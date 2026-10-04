@@ -1,0 +1,142 @@
+@model AssetHub.ViewModels.RegisterViewModel
+
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="login-split-layout">
+    <!-- Left Column: Platform Capabilities -->
+    <div class="login-showcase-side">
+        <div class="login-kicker">
+            <i class="bi bi-person-plus-fill"></i>
+            <span>Enterprise Asset Portal</span>
+        </div>
+
+        <h1 class="login-heading">
+            Join AssetHub IT Management
+        </h1>
+
+        <p class="login-desc">
+            Register your administrative or manager account to gain real-time visibility into organization equipment, employee custody chains, and lifecycle tracking.
+        </p>
+
+        <!-- Live Platform Metrics Tiles -->
+        <div class="showcase-stat-row">
+            <div class="stat-box">
+                <div class="stat-num">100%</div>
+                <div class="stat-lbl">Fleet Visibility</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">Zero</div>
+                <div class="stat-lbl">Allocation Conflict</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num">SOC-2</div>
+                <div class="stat-lbl">Audit Ready</div>
+            </div>
+        </div>
+
+        <!-- Capability Bullet Points -->
+        <div class="showcase-benefit-list">
+            <div class="benefit-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Complete asset lifecycle: Register &rarr; Assign &rarr; Return &rarr; Maintain</span>
+            </div>
+            <div class="benefit-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Multi-department equipment custody logs and ownership tracking</span>
+            </div>
+            <div class="benefit-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Automated servicing alerts and preventative maintenance schedules</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Registration Card -->
+    <div class="login-card-container">
+        <div class="card-title-header">
+            <h2 class="card-main-title">Create an Account</h2>
+            <p class="card-subtitle">Fill in your information to join your organization</p>
+        </div>
+
+        <form asp-action="Register" method="post" id="registerForm" novalidate>
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+            {
+                <div asp-validation-summary="ModelOnly" class="auth-alert-danger"></div>
+            }
+
+            <div class="row g-2">
+                <div class="col-md-6 form-field-group">
+                    <label asp-for="FirstName" class="field-label">
+                        <span>First Name</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="bi bi-person input-leading-icon"></i>
+                        <input asp-for="FirstName" class="modern-input" placeholder="John" required />
+                    </div>
+                    <span asp-validation-for="FirstName" class="validation-message"></span>
+                </div>
+
+                <div class="col-md-6 form-field-group">
+                    <label asp-for="LastName" class="field-label">
+                        <span>Last Name</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="bi bi-person input-leading-icon"></i>
+                        <input asp-for="LastName" class="modern-input" placeholder="Doe" required />
+                    </div>
+                    <span asp-validation-for="LastName" class="validation-message"></span>
+                </div>
+            </div>
+
+            <div class="form-field-group">
+                <label asp-for="Email" class="field-label">
+                    <span>Work Email Address</span>
+                </label>
+                <div class="input-with-icon">
+                    <i class="bi bi-envelope input-leading-icon"></i>
+                    <input asp-for="Email" class="modern-input" placeholder="user@company.com" type="email" required autocomplete="username" />
+                </div>
+                <span asp-validation-for="Email" class="validation-message"></span>
+            </div>
+
+            <div class="form-field-group">
+                <label asp-for="Password" class="field-label">
+                    <span>Password</span>
+                </label>
+                <div class="input-with-icon">
+                    <i class="bi bi-lock input-leading-icon"></i>
+                    <input asp-for="Password" class="modern-input" placeholder="••••••••••••" type="password" required autocomplete="new-password" />
+                </div>
+                <span asp-validation-for="Password" class="validation-message"></span>
+            </div>
+
+            <div class="form-field-group">
+                <label asp-for="ConfirmPassword" class="field-label">
+                    <span>Confirm Password</span>
+                </label>
+                <div class="input-with-icon">
+                    <i class="bi bi-shield-check input-leading-icon"></i>
+                    <input asp-for="ConfirmPassword" class="modern-input" placeholder="••••••••••••" type="password" required autocomplete="new-password" />
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="validation-message"></span>
+            </div>
+
+            <button type="submit" class="btn-login-submit mt-2">
+                <span>Create Account</span>
+                <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+
+            <div class="card-signup-footer">
+                <span>Already have an account?</span>
+                <a asp-action="Login" class="link-register">Sign in here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
