@@ -1,131 +1,301 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+}
+
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - AssetHub</title>
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AssetHub.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/AssetHub.styles.css"
+          asp-append-version="true" />
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AssetHub</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Home
-                            </a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacy
-                            </a>
-                        </li>
-                    </ul>
+    <div class="app-shell">
 
-                    <ul class="navbar-nav">
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            <li class="nav-item">
-                                <form asp-controller="Account"
-                                      asp-action="Logout"
-                                      method="post">
-                                    @Html.AntiForgeryToken()
+        @if (isAuthenticated)
+        {
+            <!-- =========================
+                 SIDEBAR
+                 ========================= -->
+            <aside class="app-sidebar">
 
-                                    <button type="submit"
-                                            class="nav-link btn btn-link text-dark">
-                                        Logout
-                                    </button>
-                                </form>
-                            </li>
+                <a class="app-brand"
+                   asp-controller="Home"
+                   asp-action="Index">
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Department"
-                                   asp-action="Index">
-                                    Departments
-                                </a>
-                            </li>
+                    AssetHub
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Employee"
-                                   asp-action="Index">
-                                    Employees
-                                </a>
-                            </li>
+                </a>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="AssetCategory"
-                                   asp-action="Index">
-                                    Asset Categories
-                                </a>
-                            </li>
+                <div class="app-sidebar-content">
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" 
-                                    asp-controller="Asset" 
-                                    asp-action="Index">
-                                        Assets
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-area=""
-                                   asp-controller="Account"
-                                   asp-action="Login">
-                                    Login
-                                </a>
-                            </li>
+                    <!-- Main -->
+                    <div class="sidebar-section">
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-area=""
-                                   asp-controller="Account"
-                                   asp-action="Register">
-                                    Register
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                        <div class="sidebar-section-title">
+                            Main
+                        </div>
+
+                        <a class="sidebar-link"
+                           asp-controller="Home"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">⌂</span>
+
+                            <span>Dashboard</span>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Asset Management -->
+                    <div class="sidebar-section">
+
+                        <div class="sidebar-section-title">
+                            Asset Management
+                        </div>
+
+                        <a class="sidebar-link"
+                           asp-controller="Asset"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">▣</span>
+
+                            <span>Assets</span>
+
+                        </a>
+
+                        <a class="sidebar-link"
+                           asp-controller="AssetCategory"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">◫</span>
+
+                            <span>Categories</span>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- People -->
+                    <div class="sidebar-section">
+
+                        <div class="sidebar-section-title">
+                            People
+                        </div>
+
+                        <a class="sidebar-link"
+                           asp-controller="Employee"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">♙</span>
+
+                            <span>Employees</span>
+
+                        </a>
+
+                        <a class="sidebar-link"
+                           asp-controller="Department"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">▤</span>
+
+                            <span>Departments</span>
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Operations -->
+                    <div class="sidebar-section">
+
+                        <div class="sidebar-section-title">
+                            Operations
+                        </div>
+
+                        <a class="sidebar-link"
+                           asp-controller="AssetAssignment"
+                           asp-action="Create">
+
+                            <span class="sidebar-icon">↗</span>
+
+                            <span>Assignment</span>
+
+                        </a>
+
+                        <a class="sidebar-link"
+                           asp-controller="AssetReturn"
+                           asp-action="Create">
+
+                            <span class="sidebar-icon">↙</span>
+
+                            <span>Return</span>
+
+                        </a>
+
+                        <a class="sidebar-link"
+                           asp-controller="Maintenance"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">⚙</span>
+
+                            <span>Maintenance</span>
+
+                        </a>
+
+                        <a class="sidebar-link"
+                           asp-controller="Warranty"
+                           asp-action="Index">
+
+                            <span class="sidebar-icon">✓</span>
+
+                            <span>Warranty</span>
+
+                        </a>
+
+                    </div>
+
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+            </aside>
+        }
+
+
+        <!-- =========================
+             MAIN APPLICATION AREA
+             ========================= -->
+
+        <div class="app-main @(isAuthenticated ? "" : "app-main-full")">
+
+            @if (isAuthenticated)
+            {
+                <!-- =========================
+                     TOP BAR
+                     ========================= -->
+
+                <header class="app-topbar">
+
+                    <div>
+                        <span class="text-muted">
+                            @ViewData["Title"]
+                        </span>
+                    </div>
+
+
+                    <div class="app-user">
+
+                        @{
+                            var userName = User.Identity?.Name;
+                            var userInitial =
+                                !string.IsNullOrWhiteSpace(userName)
+                                    ? userName.Substring(0, 1).ToUpper()
+                                    : "U";
+                        }
+
+                        <div class="app-user-avatar">
+                            @userInitial
+                        </div>
+
+
+                        <div>
+
+                            <div class="fw-semibold">
+                                @(userName ?? "User")
+                            </div>
+
+                            <div class="small text-muted">
+                                AssetHub User
+                            </div>
+
+                        </div>
+
+
+                        <form asp-controller="Account"
+                              asp-action="Logout"
+                              method="post"
+                              class="ms-3">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-outline-secondary btn-sm">
+
+                                Logout
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </header>
+            }
+
+
+            <!-- =========================
+                 PAGE CONTENT
+                 ========================= -->
+
+            <main role="main"
+                  class="app-content">
+
+                @RenderBody()
+
+            </main>
+
+
+            <!-- =========================
+                 FOOTER
+                 ========================= -->
+
+            <footer class="app-footer">
+
+                <div>
+                    &copy; 2026 AssetHub
+                </div>
+
+            </footer>
+
+        </div>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - AssetHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>
