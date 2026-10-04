@@ -20,28 +20,73 @@ public class AssetController : Controller
     }
 
     // GET: /Asset
-    public async Task<IActionResult> Index()
+    // GET: /Asset
+    public async Task<IActionResult> Index(AssetFilterViewModel filter)
     {
-        var assets = await (
+        var query =
             from asset in _context.Assets.AsNoTracking()
             join category in _context.AssetCategories.AsNoTracking()
                 on asset.AssetCategoryId equals category.AssetCategoryId
-            orderby asset.AssetName
-            select new AssetListViewModel
+            select new
             {
-                AssetId = asset.AssetId,
-                AssetTag = asset.AssetTag,
-                AssetName = asset.AssetName,
-                SerialNumber = asset.SerialNumber,
-                CategoryName = category.CategoryName,
-                Brand = asset.Brand,
-                Model = asset.Model,
-                AssetStatus = asset.AssetStatus,
-                Condition = asset.Condition,
-                Location = asset.Location,
-                IsActive = asset.IsActive
-            }
-        ).ToListAsync();
+                Asset = asset,
+                CategoryName = category.CategoryName
+            };
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var search = filter.Search.Trim();
+
+            query = query.Where(x =>
+                x.Asset.AssetTag.Contains(search) ||
+                x.Asset.AssetName.Contains(search) ||
+                (x.Asset.SerialNumber != null &&
+                 x.Asset.SerialNumber.Contains(search)) ||
+                (x.Asset.Brand != null &&
+                 x.Asset.Brand.Contains(search)) ||
+                (x.Asset.Model != null &&
+                 x.Asset.Model.Contains(search)));
+        }
+
+        if (filter.AssetCategoryId.HasValue)
+        {
+            query = query.Where(x =>
+                x.Asset.AssetCategoryId == filter.AssetCategoryId.Value);
+        }
+
+        if (filter.AssetStatus.HasValue)
+        {
+            query = query.Where(x =>
+                x.Asset.AssetStatus == filter.AssetStatus.Value);
+        }
+
+        if (filter.Condition.HasValue)
+        {
+            query = query.Where(x =>
+                x.Asset.Condition == filter.Condition.Value);
+        }
+
+        var assets = await query
+            .OrderBy(x => x.Asset.AssetName)
+            .Select(x => new AssetListViewModel
+            {
+                AssetId = x.Asset.AssetId,
+                AssetTag = x.Asset.AssetTag,
+                AssetName = x.Asset.AssetName,
+                SerialNumber = x.Asset.SerialNumber,
+                CategoryName = x.CategoryName,
+                Brand = x.Asset.Brand,
+                Model = x.Asset.Model,
+                AssetStatus = x.Asset.AssetStatus,
+                Condition = x.Asset.Condition,
+                Location = x.Asset.Location,
+                IsActive = x.Asset.IsActive
+            })
+            .ToListAsync();
+
+        await LoadFilterOptionsAsync();
+
+        ViewBag.Filter = filter;
 
         return View(assets);
     }
@@ -175,7 +220,14 @@ public class AssetController : Controller
             .ToListAsync();
     }
 
-
+    private async Task LoadFilterOptionsAsync()
+    {
+        ViewBag.FilterCategories = await _context.AssetCategories
+            .AsNoTracking()
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.CategoryName)
+            .ToListAsync();
+    }
 
     // GET: /Asset/Edit/5
     [HttpGet]

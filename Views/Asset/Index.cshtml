@@ -14,7 +14,107 @@
         Add Asset
     </a>
 </div>
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
 
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label for="Search" class="form-label">
+                        Search
+                    </label>
+
+                    <input type="text"
+                           id="Search"
+                           name="Search"
+                           value="@ViewBag.Filter?.Search"
+                           class="form-control"
+                           placeholder="Asset tag, name, serial, brand..." />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="AssetCategoryId" class="form-label">
+                        Category
+                    </label>
+
+                    <select id="AssetCategoryId"
+                            name="AssetCategoryId"
+                            class="form-select">
+
+                        <option value="">All Categories</option>
+
+                        @foreach (var category in ViewBag.FilterCategories)
+                        {
+                            <option value="@category.AssetCategoryId"
+                                    selected="@(ViewBag.Filter?.AssetCategoryId == category.AssetCategoryId ? "selected" : null)">
+                                @category.CategoryName
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="AssetStatus" class="form-label">
+                        Status
+                    </label>
+
+                    <select id="AssetStatus"
+                            name="AssetStatus"
+                            class="form-select">
+
+                        <option value="">All Statuses</option>
+
+                        @foreach (var status in Enum.GetValues<AssetHub.Models.Enums.AssetStatus>())
+                        {
+                            <option value="@status"
+                                    selected="@(ViewBag.Filter?.AssetStatus == status ? "selected" : null)">
+                                @status
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="Condition" class="form-label">
+                        Condition
+                    </label>
+
+                    <select id="Condition"
+                            name="Condition"
+                            class="form-select">
+
+                        <option value="">All Conditions</option>
+
+                        @foreach (var condition in Enum.GetValues<AssetHub.Models.Enums.AssetCondition>())
+                        {
+                            <option value="@condition"
+                                    selected="@(ViewBag.Filter?.Condition == condition ? "selected" : null)">
+                                @condition
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        Filter
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="mt-3">
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary btn-sm">
+                    Clear Filters
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
 @if (!Model.Any())
 {
     <div class="alert alert-info">
