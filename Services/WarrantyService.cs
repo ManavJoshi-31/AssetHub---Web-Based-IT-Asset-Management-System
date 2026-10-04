@@ -1,7 +1,7 @@
 ﻿using AssetHub.Data;
 using AssetHub.Models;
 using Microsoft.EntityFrameworkCore;
-
+using AssetHub.Models.Enums;
 namespace AssetHub.Services;
 
 public class WarrantyService
@@ -47,5 +47,21 @@ public class WarrantyService
         await _context.SaveChangesAsync();
 
         return (true, null);
+    }
+    public WarrantyStatus GetWarrantyStatus(DateTime endDate)
+    {
+        var today = DateTime.Today;
+
+        if (endDate.Date < today)
+        {
+            return WarrantyStatus.Expired;
+        }
+
+        if (endDate.Date <= today.AddDays(30))
+        {
+            return WarrantyStatus.ExpiringSoon;
+        }
+
+        return WarrantyStatus.Active;
     }
 }

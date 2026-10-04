@@ -87,4 +87,13 @@ public class WarrantyController : Controller
             "AssetId",
             "AssetTag");
     }
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var warranties = await _context.Warranties
+            .OrderByDescending(w => w.EndDate)
+            .ToListAsync();
+
+        return View(warranties);
+    }
 }
