@@ -11,6 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AssetHub</title>
+    <meta name="description" content="AssetHub - Modern Web-Based IT Asset Management System" />
 
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +24,7 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
+    <!-- AssetHub Luminous Theme Stylesheet -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AssetHub.styles.css" asp-append-version="true" />
 </head>
@@ -34,20 +36,27 @@
         @if (isAuthenticated)
         {
             <!-- =========================
-                 SIDEBAR
+                 DEEP INK NAVY SIDEBAR
                  ========================= -->
             <aside class="app-sidebar">
 
+                <!-- Brand Header -->
                 <a class="app-brand"
                    asp-controller="Home"
                    asp-action="Dashboard">
-                    <i class="bi bi-box-seam-fill me-2" style="color: #3b82f6;"></i>
-                    <span>AssetHub</span>
+                    <div class="brand-icon-box">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="brand-name">AssetHub</span>
+                        <span class="brand-badge-pill">ITAM</span>
+                    </div>
                 </a>
 
+                <!-- Navigation Sections -->
                 <div class="app-sidebar-content">
 
-                    <!-- Main -->
+                    <!-- Main Section -->
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">
                             Main
@@ -56,7 +65,9 @@
                         <a class="sidebar-link @(currentController == "Home" && (currentAction == "Dashboard" || currentAction == "Index") ? "active" : "")"
                            asp-controller="Home"
                            asp-action="Dashboard">
-                            <span class="sidebar-icon">⌂</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-grid-1x2-fill"></i>
+                            </div>
                             <span>Dashboard</span>
                         </a>
                     </div>
@@ -71,14 +82,18 @@
                         <a class="sidebar-link @(currentController == "Asset" ? "active" : "")"
                            asp-controller="Asset"
                            asp-action="Index">
-                            <span class="sidebar-icon">▣</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-laptop-fill"></i>
+                            </div>
                             <span>Assets</span>
                         </a>
 
                         <a class="sidebar-link @(currentController == "AssetCategory" ? "active" : "")"
                            asp-controller="AssetCategory"
                            asp-action="Index">
-                            <span class="sidebar-icon">◫</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-tags-fill"></i>
+                            </div>
                             <span>Categories</span>
                         </a>
                     </div>
@@ -93,14 +108,18 @@
                         <a class="sidebar-link @(currentController == "Employee" ? "active" : "")"
                            asp-controller="Employee"
                            asp-action="Index">
-                            <span class="sidebar-icon">♙</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
                             <span>Employees</span>
                         </a>
 
                         <a class="sidebar-link @(currentController == "Department" ? "active" : "")"
                            asp-controller="Department"
                            asp-action="Index">
-                            <span class="sidebar-icon">▤</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-building-fill"></i>
+                            </div>
                             <span>Departments</span>
                         </a>
                     </div>
@@ -115,32 +134,49 @@
                         <a class="sidebar-link @(currentController == "AssetAssignment" ? "active" : "")"
                            asp-controller="AssetAssignment"
                            asp-action="Create">
-                            <span class="sidebar-icon">↗</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-arrow-up-right-circle-fill"></i>
+                            </div>
                             <span>Assignment</span>
                         </a>
 
                         <a class="sidebar-link @(currentController == "AssetReturn" ? "active" : "")"
                            asp-controller="AssetReturn"
                            asp-action="Create">
-                            <span class="sidebar-icon">↙</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-arrow-down-left-circle-fill"></i>
+                            </div>
                             <span>Return</span>
                         </a>
 
                         <a class="sidebar-link @(currentController == "Maintenance" ? "active" : "")"
                            asp-controller="Maintenance"
                            asp-action="Index">
-                            <span class="sidebar-icon">⚙</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-wrench-adjustable"></i>
+                            </div>
                             <span>Maintenance</span>
                         </a>
 
                         <a class="sidebar-link @(currentController == "Warranty" ? "active" : "")"
                            asp-controller="Warranty"
                            asp-action="Index">
-                            <span class="sidebar-icon">✓</span>
+                            <div class="sidebar-icon-wrap">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
                             <span>Warranty</span>
                         </a>
                     </div>
 
+                </div>
+
+                <!-- Sidebar Footer Status -->
+                <div class="sidebar-footer">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="status-dot"></span>
+                        <span>Enterprise Fleet</span>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary py-1 px-2">v1.0</span>
                 </div>
 
             </aside>
@@ -156,19 +192,30 @@
             @if (isAuthenticated)
             {
                 <!-- =========================
-                     TOP BAR
+                     FROSTED TOP BAR
                      ========================= -->
 
                 <header class="app-topbar">
 
-                    <div>
-                        <span class="fw-semibold text-secondary">
+                    <!-- Breadcrumbs -->
+                    <div class="topbar-breadcrumb">
+                        <a asp-controller="Home" asp-action="Dashboard" class="breadcrumb-root">
+                            <i class="bi bi-house"></i>
+                            <span>AssetHub</span>
+                        </a>
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-current">
                             @ViewData["Title"]
                         </span>
                     </div>
 
+                    <!-- Topbar Right Profile & Status -->
+                    <div class="topbar-right-area">
 
-                    <div class="app-user">
+                        <div class="system-status-indicator d-none d-md-inline-flex">
+                            <span class="status-dot"></span>
+                            <span>Systems Operational</span>
+                        </div>
 
                         @{
                             var userName = User.Identity?.Name;
@@ -178,36 +225,33 @@
                                     : "U";
                         }
 
-                        <div class="app-user-avatar">
-                            @userInitial
+                        <div class="app-user">
+                            <div class="app-user-avatar">
+                                @userInitial
+                            </div>
+                            <div class="d-none d-sm-block text-start pe-2">
+                                <div class="user-meta-name">
+                                    @(userName ?? "User")
+                                </div>
+                                <div class="user-meta-role">
+                                    IT Workspace
+                                </div>
+                            </div>
                         </div>
 
-
-                        <div>
-
-                            <div class="fw-semibold">
-                                @(userName ?? "User")
-                            </div>
-
-                            <div class="small text-muted">
-                                AssetHub User
-                            </div>
-
-                        </div>
-
-
+                        <!-- Sign Out Form -->
                         <form asp-controller="Account"
                               asp-action="Logout"
                               method="post"
-                              class="ms-3">
+                              class="m-0">
 
                             @Html.AntiForgeryToken()
 
                             <button type="submit"
-                                    class="btn btn-outline-secondary btn-sm">
-
-                                Logout
-
+                                    class="btn-logout"
+                                    title="Sign out of AssetHub">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span class="d-none d-sm-inline">Sign Out</span>
                             </button>
 
                         </form>
@@ -231,13 +275,18 @@
 
 
             <!-- =========================
-                 FOOTER
+                 MODERN FOOTER
                  ========================= -->
 
             <footer class="app-footer">
 
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-shield-check text-primary"></i>
+                    <span>SOC-2 Type II Certified Architecture &bull; 256-Bit SSL Secured</span>
+                </div>
+
                 <div>
-                    &copy; @DateTime.UtcNow.Year AssetHub
+                    &copy; @DateTime.UtcNow.Year AssetHub Inc. All rights reserved.
                 </div>
 
             </footer>

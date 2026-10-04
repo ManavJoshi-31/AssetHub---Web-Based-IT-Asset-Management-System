@@ -1,37 +1,59 @@
-﻿@model IEnumerable<AssetHub.ViewModels.AssetCategoryViewModel>
+@model IEnumerable<AssetHub.ViewModels.AssetCategoryViewModel>
 
 @{
     ViewData["Title"] = "Asset Categories";
 }
 
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Asset Categories</h2>
-
-        <a asp-action="Create" class="btn btn-primary">
-            + Add Category
-        </a>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Asset Categories</h1>
+        <p class="text-muted mb-0">
+            Define equipment classifications, device types, and hardware categories.
+        </p>
     </div>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info">
-            No asset categories have been created yet.
-        </div>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-tag-fill me-1"></i>
+        <span>Add Category</span>
+    </a>
+</div>
 
-                <thead class="table-light">
+@if (!Model.Any())
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <div class="metric-icon-box icon-box-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                <i class="bi bi-tags"></i>
+            </div>
+            <h5 class="fw-bold mb-1">No categories found</h5>
+            <p class="text-muted mb-4">No asset categories have been defined yet.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-tag-fill me-1"></i>
+                <span>Create Your First Category</span>
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body border-bottom py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Category Directory</h5>
+                <span class="badge bg-primary-subtle text-primary">@Model.Count() Categories</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <th>Category Code</th>
+                        <th class="ps-4">Category Code</th>
                         <th>Category Name</th>
                         <th>Description</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
 
@@ -39,11 +61,17 @@
                     @foreach (var category in Model)
                     {
                         <tr>
-                            <td>@category.CategoryCode</td>
+                            <td class="ps-4">
+                                <span class="badge bg-secondary-subtle">
+                                    @category.CategoryCode
+                                </span>
+                            </td>
 
-                            <td>@category.CategoryName</td>
+                            <td class="fw-bold text-dark">
+                                @category.CategoryName
+                            </td>
 
-                            <td>
+                            <td class="text-muted">
                                 @(string.IsNullOrWhiteSpace(category.Description)
                                     ? "-"
                                     : category.Description)
@@ -52,31 +80,31 @@
                             <td>
                                 @if (category.IsActive)
                                 {
-                                    <span class="badge bg-success">
+                                    <span class="badge bg-success-subtle">
+                                        <span class="status-dot" style="width: 6px; height: 6px;"></span>
                                         Active
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">
+                                    <span class="badge bg-secondary-subtle">
                                         Inactive
                                     </span>
                                 }
                             </td>
 
-                            <td>
+                            <td class="text-end pe-4">
                                 <a asp-action="Edit"
                                    asp-route-id="@category.AssetCategoryId"
                                    class="btn btn-sm btn-outline-primary">
-                                    Edit
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    <span>Edit</span>
                                 </a>
                             </td>
                         </tr>
                     }
                 </tbody>
-
             </table>
         </div>
-    }
-
-</div>
+    </div>
+}
