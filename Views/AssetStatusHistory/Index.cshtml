@@ -4,44 +4,227 @@
     ViewData["Title"] = "Asset Status History";
 }
 
-<h1>Asset Status History</h1>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Asset Status History</h1>
+        <p class="text-muted mb-0">
+            Review all status changes recorded for this asset.
+        </p>
+    </div>
 
-<div class="mb-3">
-    <strong>Asset ID:</strong> @ViewBag.AssetId
+    <a asp-controller="Asset"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to Assets
+    </a>
 </div>
+
+
+<!-- Asset Information -->
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-body p-4">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <div class="rounded-circle bg-primary-subtle text-primary
+                d-flex align-items-center justify-content-center"
+                 style="width: 48px; height: 48px;">
+
+                <span class="fw-bold">
+                    #
+                </span>
+
+            </div>
+
+            <div>
+
+                <div class="small text-muted">
+                    Asset ID
+                </div>
+
+                <div class="fs-5 fw-semibold">
+                    @ViewBag.AssetId
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        No status history found for this asset.
+    <!-- Empty State -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body text-center py-5">
+
+            <div class="fs-1 mb-3">
+                📋
+            </div>
+
+            <h5 class="fw-semibold">
+                No status history
+            </h5>
+
+            <p class="text-muted mb-0">
+                No status changes have been recorded for this asset yet.
+            </p>
+
+        </div>
+
     </div>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Old Status</th>
-                <th>New Status</th>
-                <th>Changed At</th>
-                <th>Changed By</th>
-                <th>Reason</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
+    <!-- History -->
+    <div class="card border-0 shadow-sm">
 
-        <tbody>
+        <div class="card-body border-bottom">
+
+            <h5 class="fw-semibold mb-1">
+                Status Changes
+            </h5>
+
+            <small class="text-muted">
+                Showing @Model.Count() status change(s)
+            </small>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
             @foreach (var history in Model)
             {
-                <tr>
-                    <td>@history.OldStatus</td>
-                    <td>@history.NewStatus</td>
-                    <td>@history.ChangedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
-                    <td>@history.ChangedByUserId</td>
-                    <td>@history.Reason</td>
-                    <td>@history.Notes</td>
-                </tr>
+                <div class="p-4 border-bottom">
+
+                    <div class="row g-4">
+
+                        <!-- Status Change -->
+                        <div class="col-lg-4">
+
+                            <div class="small text-muted mb-2">
+                                Status Change
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <span class="badge bg-secondary-subtle text-secondary">
+                                    @history.OldStatus
+                                </span>
+
+                                <span class="text-muted">
+                                    →
+                                </span>
+
+                                <span class="badge bg-primary-subtle text-primary">
+                                    @history.NewStatus
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+                        <div class="col-lg-2">
+
+                            <div class="small text-muted mb-2">
+                                Changed At
+                            </div>
+
+                            <div class="fw-semibold">
+                                @history.ChangedAt.ToLocalTime().ToString("dd MMM yyyy")
+                            </div>
+
+                            <small class="text-muted">
+                                @history.ChangedAt.ToLocalTime().ToString("HH:mm")
+                            </small>
+
+                        </div>
+
+
+                        <!-- Changed By -->
+                        <div class="col-lg-2">
+
+                            <div class="small text-muted mb-2">
+                                Changed By
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(history.ChangedByUserId) &&
+                                 ViewBag.UserNames.ContainsKey(history.ChangedByUserId))
+                            {
+                                <div class="fw-semibold">
+                                    @ViewBag.UserNames[history.ChangedByUserId]
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    —
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- Reason -->
+                        <div class="col-lg-2">
+
+                            <div class="small text-muted mb-2">
+                                Reason
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(history.Reason))
+                            {
+                                <div>
+                                    @history.Reason
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    —
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <!-- Notes -->
+                        <div class="col-lg-2">
+
+                            <div class="small text-muted mb-2">
+                                Notes
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(history.Notes))
+                            {
+                                <div>
+                                    @history.Notes
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    —
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
             }
-        </tbody>
-    </table>
+
+        </div>
+
+    </div>
 }
