@@ -1,4 +1,4 @@
-﻿using AssetHub.Models;
+using AssetHub.Models;
 using AssetHub.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +49,7 @@ public class AccountController : Controller
         {
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         foreach (var error in result.Errors)
@@ -89,12 +89,16 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             if (!string.IsNullOrEmpty(returnUrl) &&
-                Url.IsLocalUrl(returnUrl))
+                Url.IsLocalUrl(returnUrl) &&
+                returnUrl != "/" &&
+                !returnUrl.Equals("/Home", StringComparison.OrdinalIgnoreCase) &&
+                !returnUrl.Equals("/Home/Index", StringComparison.OrdinalIgnoreCase) &&
+                !returnUrl.Equals("/Home/Landing", StringComparison.OrdinalIgnoreCase))
             {
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         ModelState.AddModelError(

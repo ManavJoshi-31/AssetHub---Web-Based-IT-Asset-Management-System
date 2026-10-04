@@ -1,0 +1,352 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Welcome Hero Banner -->
+<div class="dashboard-welcome-banner">
+    <div>
+        <div class="hero-pill-badge">
+            <i class="bi bi-speedometer2"></i>
+            <span>Operations Command Center</span>
+        </div>
+
+        <h1 class="banner-title">
+            Enterprise Fleet &amp; <span class="gradient-span">Custody Intelligence</span>
+        </h1>
+
+        <p class="banner-subtitle">
+            Welcome to AssetHub. Centralize organizational hardware, oversee verified employee custody chains, track warranties, and monitor lifecycle states in real time.
+        </p>
+    </div>
+
+    <!-- Live Fleet Capability Chips -->
+    <div class="banner-stat-chip-group d-none d-xl-flex">
+        <div class="banner-chip">
+            <div class="banner-chip-num">100%</div>
+            <div class="banner-chip-lbl">Fleet Visibility</div>
+        </div>
+        <div class="banner-chip">
+            <div class="banner-chip-num">Zero</div>
+            <div class="banner-chip-lbl">Allocation Drift</div>
+        </div>
+        <div class="banner-chip">
+            <div class="banner-chip-num">SOC-2</div>
+            <div class="banner-chip-lbl">Audit Ready</div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Quick Stats Metric Cards -->
+<div class="row g-4 mb-4">
+
+    <!-- Assets -->
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card">
+            <div>
+                <div class="metric-top-row">
+                    <div>
+                        <div class="metric-category-tag">Asset Management</div>
+                        <h4 class="metric-title">IT Assets</h4>
+                        <p class="metric-desc">
+                            View and manage workstations, laptops, and peripheral hardware.
+                        </p>
+                    </div>
+
+                    <div class="metric-icon-box icon-box-primary">
+                        <i class="bi bi-laptop"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card-footer">
+                <a asp-controller="Asset"
+                   asp-action="Index"
+                   class="btn btn-sm btn-outline-primary w-100">
+                    <span>View Assets</span>
+                    <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Employees -->
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card">
+            <div>
+                <div class="metric-top-row">
+                    <div>
+                        <div class="metric-category-tag">People &amp; Teams</div>
+                        <h4 class="metric-title">Employees</h4>
+                        <p class="metric-desc">
+                            Manage employee directory, custodians, and department allocations.
+                        </p>
+                    </div>
+
+                    <div class="metric-icon-box icon-box-success">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card-footer">
+                <a asp-controller="Employee"
+                   asp-action="Index"
+                   class="btn btn-sm btn-outline-primary w-100">
+                    <span>View Directory</span>
+                    <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Assignment -->
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card">
+            <div>
+                <div class="metric-top-row">
+                    <div>
+                        <div class="metric-category-tag">Custody Chain</div>
+                        <h4 class="metric-title">Assignments</h4>
+                        <p class="metric-desc">
+                            Assign available hardware to employees with timestamped records.
+                        </p>
+                    </div>
+
+                    <div class="metric-icon-box icon-box-warning">
+                        <i class="bi bi-arrow-up-right-circle-fill"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card-footer">
+                <a asp-controller="AssetAssignment"
+                   asp-action="Create"
+                   class="btn btn-sm btn-outline-primary w-100">
+                    <span>Assign Asset</span>
+                    <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Maintenance -->
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card">
+            <div>
+                <div class="metric-top-row">
+                    <div>
+                        <div class="metric-category-tag">Service &amp; Health</div>
+                        <h4 class="metric-title">Maintenance</h4>
+                        <p class="metric-desc">
+                            Track hardware servicing, vendor repair tickets, and audits.
+                        </p>
+                    </div>
+
+                    <div class="metric-icon-box icon-box-danger">
+                        <i class="bi bi-wrench-adjustable"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card-footer">
+                <a asp-controller="Maintenance"
+                   asp-action="Index"
+                   class="btn btn-sm btn-outline-primary w-100">
+                    <span>View Maintenance</span>
+                    <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Operational Grid: Quick Workflows & Management Hub -->
+<div class="row g-4">
+
+    <!-- Quick Action Workflows -->
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Quick Actions</h4>
+                        <p class="text-muted small mb-0">
+                            Fast-track primary IT operational workflows and custody changes.
+                        </p>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary">
+                        <i class="bi bi-lightning-charge-fill me-1"></i> Workflows
+                    </span>
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- Register Asset -->
+                    <div class="col-md-6">
+                        <a asp-controller="Asset"
+                           asp-action="Create"
+                           class="action-workflow-card">
+                            <div class="action-card-left">
+                                <div class="action-icon-circle icon-box-primary">
+                                    <i class="bi bi-plus-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="action-text-title">+ Add Asset</div>
+                                    <div class="action-text-desc">Register new hardware into inventory</div>
+                                </div>
+                            </div>
+                            <div class="action-arrow-icon">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Assign Asset -->
+                    <div class="col-md-6">
+                        <a asp-controller="AssetAssignment"
+                           asp-action="Create"
+                           class="action-workflow-card">
+                            <div class="action-card-left">
+                                <div class="action-icon-circle icon-box-warning">
+                                    <i class="bi bi-person-check-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="action-text-title">Assign Asset</div>
+                                    <div class="action-text-desc">Allocate available gear to staff</div>
+                                </div>
+                            </div>
+                            <div class="action-arrow-icon">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Return Asset -->
+                    <div class="col-md-6">
+                        <a asp-controller="AssetReturn"
+                           asp-action="Create"
+                           class="action-workflow-card">
+                            <div class="action-card-left">
+                                <div class="action-icon-circle icon-box-success">
+                                    <i class="bi bi-arrow-down-left-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <div class="action-text-title">Return Asset</div>
+                                    <div class="action-text-desc">Process return &amp; verify condition</div>
+                                </div>
+                            </div>
+                            <div class="action-arrow-icon">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Create Maintenance -->
+                    <div class="col-md-6">
+                        <a asp-controller="Maintenance"
+                           asp-action="Create"
+                           class="action-workflow-card">
+                            <div class="action-card-left">
+                                <div class="action-icon-circle icon-box-danger">
+                                    <i class="bi bi-tools"></i>
+                                </div>
+                                <div>
+                                    <div class="action-text-title">Record Maintenance</div>
+                                    <div class="action-text-desc">Log servicing or repair tickets</div>
+                                </div>
+                            </div>
+                            <div class="action-arrow-icon">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Enterprise Management Hub -->
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-body p-4 d-flex flex-column justify-content-between">
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h4 class="fw-bold mb-1">Management</h4>
+                            <p class="text-muted small mb-0">
+                                Core system entities &amp; directories.
+                            </p>
+                        </div>
+                        <span class="badge bg-secondary-subtle">Admin</span>
+                    </div>
+
+                    <div>
+                        <a asp-controller="Department"
+                           asp-action="Index"
+                           class="mgmt-nav-card">
+                            <div class="mgmt-nav-left">
+                                <i class="bi bi-building mgmt-icon"></i>
+                                <span>Departments</span>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a asp-controller="Employee"
+                           asp-action="Index"
+                           class="mgmt-nav-card">
+                            <div class="mgmt-nav-left">
+                                <i class="bi bi-people mgmt-icon"></i>
+                                <span>Employees Directory</span>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a asp-controller="AssetCategory"
+                           asp-action="Index"
+                           class="mgmt-nav-card">
+                            <div class="mgmt-nav-left">
+                                <i class="bi bi-tags mgmt-icon"></i>
+                                <span>Asset Categories</span>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+
+                        <a asp-controller="Warranty"
+                           asp-action="Index"
+                           class="mgmt-nav-card">
+                            <div class="mgmt-nav-left">
+                                <i class="bi bi-shield-check mgmt-icon"></i>
+                                <span>Warranties &amp; SLAs</span>
+                            </div>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Compliance & Fleet Security Card -->
+                <div class="p-3 bg-light rounded-3 border mt-3">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-patch-check-fill text-primary"></i>
+                        <span class="fw-bold small text-heading">Automated Custody Audits</span>
+                    </div>
+                    <p class="text-muted mb-0" style="font-size: 0.78rem; line-height: 1.4;">
+                        Every hardware assignment, return, and servicing action is recorded with strict timestamps.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

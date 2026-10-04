@@ -1,230 +1,192 @@
-﻿@model IEnumerable<AssetHub.Models.AssetStatusHistory>
-
+@model IEnumerable<AssetHub.Models.AssetStatusHistory>
 @{
     ViewData["Title"] = "Asset Status History";
+    var asset = ViewBag.Asset as AssetHub.Models.Asset;
+    var userNames = ViewBag.UserNames as Dictionary<string, string> ?? new Dictionary<string, string>();
 }
 
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h1 class="fw-bold mb-1">Asset Status History</h1>
+        <h1 class="fw-bold mb-1">Status Audit History</h1>
         <p class="text-muted mb-0">
-            Review all status changes recorded for this asset.
+            Immutable lifecycle and custodial status change records for this equipment.
         </p>
     </div>
 
     <a asp-controller="Asset"
        asp-action="Index"
        class="btn btn-outline-secondary">
-        Back to Assets
+        <i class="bi bi-arrow-left me-1"></i>
+        <span>Back to Assets</span>
     </a>
 </div>
 
-
-<!-- Asset Information -->
-<div class="card border-0 shadow-sm mb-4">
-
+<!-- Asset Context Banner Card -->
+<div class="card mb-4">
     <div class="card-body p-4">
-
-        <div class="d-flex align-items-center gap-3">
-
-            <div class="rounded-circle bg-primary-subtle text-primary
-                d-flex align-items-center justify-content-center"
-                 style="width: 48px; height: 48px;">
-
-                <span class="fw-bold">
-                    #
-                </span>
-
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="metric-icon-box icon-box-primary" style="width: 52px; height: 52px; font-size: 1.5rem;">
+                    <i class="bi bi-laptop"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="fs-5 fw-bold text-dark">
+                            @(asset?.AssetName ?? $"Asset #{ViewBag.AssetId}")
+                        </span>
+                        @if (!string.IsNullOrWhiteSpace(asset?.AssetTag))
+                        {
+                            <span class="badge bg-primary-subtle text-primary">
+                                @asset.AssetTag
+                            </span>
+                        }
+                    </div>
+                    <div class="text-muted small">
+                        @if (asset != null)
+                        {
+                            <span>@(asset.Brand ?? "Unspecified") @(asset.Model ?? "")</span>
+                            @if (!string.IsNullOrWhiteSpace(asset.SerialNumber))
+                            {
+                                <span> &bull; S/N: @asset.SerialNumber</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>Asset ID: @ViewBag.AssetId</span>
+                        }
+                    </div>
+                </div>
             </div>
 
-            <div>
-
-                <div class="small text-muted">
-                    Asset ID
+            @if (asset != null)
+            {
+                <div class="text-end">
+                    <span class="small text-muted d-block mb-1">Current Lifecycle Status</span>
+                    <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-1">
+                        @asset.AssetStatus
+                    </span>
                 </div>
-
-                <div class="fs-5 fw-semibold">
-                    @ViewBag.AssetId
-                </div>
-
-            </div>
-
+            }
         </div>
-
     </div>
-
 </div>
-
 
 @if (!Model.Any())
 {
     <!-- Empty State -->
-    <div class="card border-0 shadow-sm">
-
+    <div class="card">
         <div class="card-body text-center py-5">
-
-            <div class="fs-1 mb-3">
-                📋
+            <div class="metric-icon-box icon-box-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                <i class="bi bi-clock-history"></i>
             </div>
-
-            <h5 class="fw-semibold">
-                No status history
-            </h5>
-
+            <h5 class="fw-bold mb-1">No status history found</h5>
             <p class="text-muted mb-0">
-                No status changes have been recorded for this asset yet.
+                No lifecycle transitions or status changes have been recorded for this asset yet.
             </p>
-
         </div>
-
     </div>
 }
 else
 {
-    <!-- History -->
-    <div class="card border-0 shadow-sm">
-
-        <div class="card-body border-bottom">
-
-            <h5 class="fw-semibold mb-1">
-                Status Changes
-            </h5>
-
-            <small class="text-muted">
-                Showing @Model.Count() status change(s)
-            </small>
-
+    <!-- Timeline Card -->
+    <div class="card">
+        <div class="card-body border-bottom py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Transition Log</h5>
+                <span class="badge bg-primary-subtle text-primary">@Model.Count() Event(s)</span>
+            </div>
         </div>
 
-
         <div class="card-body p-0">
-
             @foreach (var history in Model)
             {
-                <div class="p-4 border-bottom">
+                <div class="p-4 border-bottom position-relative">
+                    <div class="row g-4 align-items-center">
 
-                    <div class="row g-4">
-
-                        <!-- Status Change -->
+                        <!-- Transition -->
                         <div class="col-lg-4">
-
-                            <div class="small text-muted mb-2">
-                                Status Change
+                            <div class="small text-muted mb-2 fw-semibold">
+                                <i class="bi bi-arrow-left-right me-1 text-primary"></i> Status Transition
                             </div>
-
                             <div class="d-flex align-items-center gap-2">
-
-                                <span class="badge bg-secondary-subtle text-secondary">
+                                <span class="badge bg-secondary-subtle">
                                     @history.OldStatus
                                 </span>
-
-                                <span class="text-muted">
-                                    →
-                                </span>
-
+                                <i class="bi bi-arrow-right text-muted"></i>
                                 <span class="badge bg-primary-subtle text-primary">
                                     @history.NewStatus
                                 </span>
-
                             </div>
-
                         </div>
 
-
-                        <!-- Date -->
-                        <div class="col-lg-2">
-
-                            <div class="small text-muted mb-2">
-                                Changed At
+                        <!-- Date & Time -->
+                        <div class="col-lg-2 col-md-4">
+                            <div class="small text-muted mb-2 fw-semibold">
+                                <i class="bi bi-calendar3 me-1 text-primary"></i> Timestamp
                             </div>
-
-                            <div class="fw-semibold">
+                            <div class="fw-bold text-dark">
                                 @history.ChangedAt.ToLocalTime().ToString("dd MMM yyyy")
                             </div>
-
                             <small class="text-muted">
-                                @history.ChangedAt.ToLocalTime().ToString("HH:mm")
+                                @history.ChangedAt.ToLocalTime().ToString("HH:mm:ss")
                             </small>
-
                         </div>
 
-
                         <!-- Changed By -->
-                        <div class="col-lg-2">
-
-                            <div class="small text-muted mb-2">
-                                Changed By
+                        <div class="col-lg-2 col-md-4">
+                            <div class="small text-muted mb-2 fw-semibold">
+                                <i class="bi bi-person me-1 text-primary"></i> Modified By
                             </div>
-
-                            @if (!string.IsNullOrWhiteSpace(history.ChangedByUserId) &&
-                                 ViewBag.UserNames.ContainsKey(history.ChangedByUserId))
+                            @if (!string.IsNullOrWhiteSpace(history.ChangedByUserId) && userNames.ContainsKey(history.ChangedByUserId))
                             {
-                                <div class="fw-semibold">
-                                    @ViewBag.UserNames[history.ChangedByUserId]
+                                <div class="fw-semibold text-dark">
+                                    @userNames[history.ChangedByUserId]
                                 </div>
                             }
                             else
                             {
-                                <span class="text-muted">
-                                    —
-                                </span>
+                                <span class="text-muted">&mdash;</span>
                             }
-
                         </div>
 
-
                         <!-- Reason -->
-                        <div class="col-lg-2">
-
-                            <div class="small text-muted mb-2">
-                                Reason
+                        <div class="col-lg-2 col-md-4">
+                            <div class="small text-muted mb-2 fw-semibold">
+                                <i class="bi bi-info-circle me-1 text-primary"></i> Reason
                             </div>
-
                             @if (!string.IsNullOrWhiteSpace(history.Reason))
                             {
-                                <div>
+                                <div class="text-dark">
                                     @history.Reason
                                 </div>
                             }
                             else
                             {
-                                <span class="text-muted">
-                                    —
-                                </span>
+                                <span class="text-muted">&mdash;</span>
                             }
-
                         </div>
-
 
                         <!-- Notes -->
                         <div class="col-lg-2">
-
-                            <div class="small text-muted mb-2">
-                                Notes
+                            <div class="small text-muted mb-2 fw-semibold">
+                                <i class="bi bi-card-text me-1 text-primary"></i> Notes
                             </div>
-
                             @if (!string.IsNullOrWhiteSpace(history.Notes))
                             {
-                                <div>
+                                <div class="text-muted small">
                                     @history.Notes
                                 </div>
                             }
                             else
                             {
-                                <span class="text-muted">
-                                    —
-                                </span>
+                                <span class="text-muted">&mdash;</span>
                             }
-
                         </div>
 
                     </div>
-
                 </div>
             }
-
         </div>
-
     </div>
 }

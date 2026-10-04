@@ -1,36 +1,59 @@
-﻿@model IEnumerable<AssetHub.Models.Department>
+@model IEnumerable<AssetHub.Models.Department>
 
 @{
     ViewData["Title"] = "Departments";
 }
 
-<div class="container mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Departments</h2>
-
-        <a asp-action="Create" class="btn btn-primary">
-            + Add Department
-        </a>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Departments</h1>
+        <p class="text-muted mb-0">
+            Organize departments, business units, and divisional cost centers.
+        </p>
     </div>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info">
-            No departments have been created yet.
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-building-add me-1"></i>
+        <span>Add Department</span>
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <div class="metric-icon-box icon-box-primary mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem;">
+                <i class="bi bi-building"></i>
+            </div>
+            <h5 class="fw-bold mb-1">No departments found</h5>
+            <p class="text-muted mb-4">No departmental units have been defined yet.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-building-add me-1"></i>
+                <span>Create Department</span>
+            </a>
         </div>
-    }
-    else
-    {
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body border-bottom py-3 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Departments List</h5>
+                <span class="badge bg-primary-subtle text-primary">@Model.Count() Departments</span>
+            </div>
+        </div>
+
         <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-light">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <th>Department Name</th>
+                        <th class="ps-4">Department Name</th>
                         <th>Department Code</th>
                         <th>Description</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
 
@@ -38,47 +61,58 @@
                     @foreach (var department in Model)
                     {
                         <tr>
-                            <td>@department.DepartmentName</td>
-                            <td>@department.DepartmentCode</td>
+                            <td class="ps-4 fw-bold text-dark">
+                                @department.DepartmentName
+                            </td>
+
                             <td>
+                                <span class="badge bg-secondary-subtle">
+                                    @department.DepartmentCode
+                                </span>
+                            </td>
+
+                            <td class="text-muted">
                                 @(string.IsNullOrWhiteSpace(department.Description)
                                     ? "-"
                                     : department.Description)
                             </td>
+
                             <td>
                                 @if (department.IsActive)
                                 {
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success-subtle">
+                                        <span class="status-dot" style="width: 6px; height: 6px;"></span>
+                                        Active
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">Inactive</span>
+                                    <span class="badge bg-secondary-subtle">
+                                        Inactive
+                                    </span>
                                 }
                             </td>
-                            <td>
-                                <div class="d-flex gap-2">
 
+                            <td class="text-end pe-4">
+                                <div class="d-inline-flex gap-2">
                                     <a asp-action="Edit"
                                        asp-route-id="@department.DepartmentId"
                                        class="btn btn-sm btn-outline-primary">
-                                        Edit
+                                        <i class="bi bi-pencil-square me-1"></i>
+                                        <span>Edit</span>
                                     </a>
 
                                     <form asp-action="ToggleStatus"
                                           asp-route-id="@department.DepartmentId"
-                                          method="post">
-
+                                          method="post"
+                                          class="m-0">
                                         <button type="submit"
                                                 class="btn btn-sm @(department.IsActive
                                                                     ? "btn-outline-danger"
                                                                     : "btn-outline-success")">
-
                                             @(department.IsActive ? "Deactivate" : "Activate")
-
                                         </button>
-
                                     </form>
-
                                 </div>
                             </td>
                         </tr>
@@ -86,6 +120,5 @@
                 </tbody>
             </table>
         </div>
-    }
-
-</div>
+    </div>
+}
