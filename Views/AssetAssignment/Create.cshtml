@@ -4,63 +4,229 @@
     ViewData["Title"] = "Assign Asset";
 }
 
-<div class="container mt-4">
-    <h2>Assign Asset</h2>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Assign Asset</h1>
+        <p class="text-muted mb-0">
+            Assign an available asset to an employee.
+        </p>
+    </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-
-    <form asp-action="Create" method="post">
-        @Html.AntiForgeryToken()
-
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-        <div class="mb-3">
-            <label asp-for="AssetId" class="form-label"></label>
-            <select asp-for="AssetId"
-                    asp-items="ViewBag.Assets"
-                    class="form-select">
-                <option value="">-- Select Asset --</option>
-            </select>
-            <span asp-validation-for="AssetId" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="EmployeeId" class="form-label"></label>
-            <select asp-for="EmployeeId"
-                    asp-items="ViewBag.Employees"
-                    class="form-select">
-                <option value="">-- Select Employee --</option>
-            </select>
-            <span asp-validation-for="EmployeeId" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="AssignmentNotes" class="form-label"></label>
-            <textarea asp-for="AssignmentNotes"
-                      class="form-control"
-                      rows="4"></textarea>
-            <span asp-validation-for="AssignmentNotes" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-            Assign Asset
-        </button>
-
-        <a asp-controller="Home"
-           asp-action="Index"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-    </form>
+    <a asp-controller="Asset"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to Assets
+    </a>
 </div>
 
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<!-- Assignment Form -->
+<div class="row">
+
+    <div class="col-xl-8 col-lg-10">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold mb-1">
+                        Assignment Details
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Select an available asset and the employee receiving it.
+                    </p>
+                </div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+
+
+                    <!-- Asset -->
+                    <div class="mb-4">
+
+                        <label asp-for="AssetId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="AssetId"
+                                asp-items="ViewBag.Assets"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Available Asset --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Only assets currently available for assignment are shown.
+                        </div>
+
+                        <span asp-validation-for="AssetId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Employee -->
+                    <div class="mb-4">
+
+                        <label asp-for="EmployeeId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="EmployeeId"
+                                asp-items="ViewBag.Employees"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Employee --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Select the employee who will receive the asset.
+                        </div>
+
+                        <span asp-validation-for="EmployeeId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+
+                        <label asp-for="AssignmentNotes"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="AssignmentNotes"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Enter any relevant assignment notes...">
+                        </textarea>
+
+                        <span asp-validation-for="AssignmentNotes"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-2 pt-2">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Assign Asset
+                        </button>
+
+                        <a asp-controller="Asset"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Information Card -->
+    <div class="col-xl-4 col-lg-10 mt-4 mt-xl-0">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-semibold mb-3">
+                    Assignment Process
+                </h5>
+
+                <div class="mb-3">
+                    <div class="fw-semibold">
+                        1. Select an asset
+                    </div>
+
+                    <small class="text-muted">
+                        Choose an asset that is currently available.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="fw-semibold">
+                        2. Select an employee
+                    </div>
+
+                    <small class="text-muted">
+                        Choose the employee receiving the asset.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="fw-semibold">
+                        3. Add notes
+                    </div>
+
+                    <small class="text-muted">
+                        Optionally record useful assignment information.
+                    </small>
+                </div>
+
+                <div>
+                    <div class="fw-semibold">
+                        4. Assign
+                    </div>
+
+                    <small class="text-muted">
+                        The asset status will be updated automatically.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
 }
