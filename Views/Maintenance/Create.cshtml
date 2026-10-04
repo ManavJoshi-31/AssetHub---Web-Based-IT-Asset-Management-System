@@ -4,147 +4,403 @@
     ViewData["Title"] = "Create Maintenance";
 }
 
-<div class="container mt-4">
-    <h2>Create Maintenance Record</h2>
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Create Maintenance</h1>
+        <p class="text-muted mb-0">
+            Create a maintenance record for an asset.
+        </p>
+    </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-
-    <form asp-action="Create" method="post">
-
-        @Html.AntiForgeryToken()
-
-        <div asp-validation-summary="ModelOnly"
-             class="text-danger mb-3"></div>
-
-        <div class="mb-3">
-            <label asp-for="AssetId" class="form-label"></label>
-
-            <select asp-for="AssetId"
-                    asp-items="ViewBag.Assets"
-                    class="form-select">
-
-                <option value="">-- Select Asset --</option>
-
-            </select>
-
-            <span asp-validation-for="AssetId"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="MaintenanceType"
-                   class="form-label"></label>
-
-            <select asp-for="MaintenanceType"
-                    class="form-select">
-
-                <option value="">-- Select Maintenance Type --</option>
-                <option value="Repair">Repair</option>
-                <option value="PreventiveMaintenance">
-                    Preventive Maintenance
-                </option>
-                <option value="Inspection">Inspection</option>
-                <option value="Upgrade">Upgrade</option>
-                <option value="Replacement">Replacement</option>
-                <option value="Other">Other</option>
-
-            </select>
-
-            <span asp-validation-for="MaintenanceType"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Description"
-                   class="form-label"></label>
-
-            <textarea asp-for="Description"
-                      class="form-control"
-                      rows="4"></textarea>
-
-            <span asp-validation-for="Description"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="StartDate"
-                   class="form-label"></label>
-
-            <input asp-for="StartDate"
-                   type="date"
-                   class="form-control" />
-
-            <span asp-validation-for="StartDate"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Vendor"
-                   class="form-label"></label>
-
-            <input asp-for="Vendor"
-                   class="form-control" />
-
-            <span asp-validation-for="Vendor"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Cost"
-                   class="form-label"></label>
-
-            <input asp-for="Cost"
-                   type="number"
-                   step="0.01"
-                   class="form-control" />
-
-            <span asp-validation-for="Cost"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="TechnicianName"
-                   class="form-label"></label>
-
-            <input asp-for="TechnicianName"
-                   class="form-control" />
-
-            <span asp-validation-for="TechnicianName"
-                  class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Notes"
-                   class="form-label"></label>
-
-            <textarea asp-for="Notes"
-                      class="form-control"
-                      rows="4"></textarea>
-
-            <span asp-validation-for="Notes"
-                  class="text-danger"></span>
-        </div>
-
-        <button type="submit"
-                class="btn btn-primary">
-            Create Maintenance
-        </button>
-
-        <a asp-controller="Home"
-           asp-action="Index"
-           class="btn btn-secondary">
-            Cancel
-        </a>
-
-    </form>
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Back to Maintenance
+    </a>
 </div>
 
-@section Scripts {
+
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm mb-4">
+        <strong>Success:</strong>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<div class="row">
+
+    <!-- Form -->
+    <div class="col-xl-8 col-lg-10">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+                    <h5 class="fw-semibold mb-1">
+                        Maintenance Details
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Enter the details of the maintenance work.
+                    </p>
+                </div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert">
+                    </div>
+
+
+                    <!-- Asset -->
+                    <div class="mb-4">
+
+                        <label asp-for="AssetId"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="AssetId"
+                                asp-items="ViewBag.Assets"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Asset --
+                            </option>
+
+                        </select>
+
+                        <div class="form-text">
+                            Select the asset that requires maintenance.
+                        </div>
+
+                        <span asp-validation-for="AssetId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Maintenance Type -->
+                    <div class="mb-4">
+
+                        <label asp-for="MaintenanceType"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="MaintenanceType"
+                                class="form-select form-select-lg">
+
+                            <option value="">
+                                -- Select Maintenance Type --
+                            </option>
+
+                            <option value="Repair">
+                                Repair
+                            </option>
+
+                            <option value="PreventiveMaintenance">
+                                Preventive Maintenance
+                            </option>
+
+                            <option value="Inspection">
+                                Inspection
+                            </option>
+
+                            <option value="Upgrade">
+                                Upgrade
+                            </option>
+
+                            <option value="Replacement">
+                                Replacement
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="MaintenanceType"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="mb-4">
+
+                        <label asp-for="Description"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Describe the maintenance work required...">
+                        </textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Start Date -->
+                    <div class="mb-4">
+
+                        <label asp-for="StartDate"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="StartDate"
+                               type="date"
+                               class="form-control" />
+
+                        <span asp-validation-for="StartDate"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Vendor + Cost -->
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Vendor"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Vendor"
+                                   class="form-control"
+                                   placeholder="Maintenance vendor" />
+
+                            <span asp-validation-for="Vendor"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label asp-for="Cost"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Cost"
+                                   type="number"
+                                   step="0.01"
+                                   class="form-control"
+                                   placeholder="0.00" />
+
+                            <span asp-validation-for="Cost"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Technician -->
+                    <div class="mb-4">
+
+                        <label asp-for="TechnicianName"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="TechnicianName"
+                               class="form-control"
+                               placeholder="Technician name" />
+
+                        <span asp-validation-for="TechnicianName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+
+                        <label asp-for="Notes"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <textarea asp-for="Notes"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Add any additional maintenance notes...">
+                        </textarea>
+
+                        <span asp-validation-for="Notes"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-2 pt-2">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Create Maintenance
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Information -->
+    <div class="col-xl-4 col-lg-10 mt-4 mt-xl-0">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h5 class="fw-semibold mb-3">
+                    Maintenance Lifecycle
+                </h5>
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        1. Create
+                    </div>
+
+                    <small class="text-muted">
+                        A new maintenance record starts as Open.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        2. Start
+                    </div>
+
+                    <small class="text-muted">
+                        Start the work when maintenance begins.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold">
+                        3. Complete
+                    </div>
+
+                    <small class="text-muted">
+                        Complete the record when the maintenance work is finished.
+                    </small>
+
+                </div>
+
+
+                <div>
+
+                    <div class="fw-semibold">
+                        4. Cancel
+                    </div>
+
+                    <small class="text-muted">
+                        Cancel the maintenance when the work will not proceed.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Status Flow -->
+        <div class="card border-0 shadow-sm mt-3">
+
+            <div class="card-body p-4">
+
+                <h6 class="fw-semibold mb-3">
+                    Status Flow
+                </h6>
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-warning-subtle text-warning-emphasis">
+                        Open
+                    </span>
+
+                    <span class="text-muted">
+                        →
+                    </span>
+
+                    <span class="badge bg-primary-subtle text-primary">
+                        In Progress
+                    </span>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <span class="badge bg-primary-subtle text-primary">
+                        In Progress
+                    </span>
+
+                    <span class="text-muted">
+                        →
+                    </span>
+
+                    <span class="badge bg-success-subtle text-success">
+                        Completed
+                    </span>
+
+                </div>
+
+                <hr />
+
+                <small class="text-muted">
+                    Maintenance can also be cancelled while it is Open
+                    or In Progress.
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
