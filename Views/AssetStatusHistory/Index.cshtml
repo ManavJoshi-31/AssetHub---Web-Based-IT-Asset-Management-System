@@ -1,0 +1,47 @@
+﻿@model IEnumerable<AssetHub.Models.AssetStatusHistory>
+
+@{
+    ViewData["Title"] = "Asset Status History";
+}
+
+<h1>Asset Status History</h1>
+
+<div class="mb-3">
+    <strong>Asset ID:</strong> @ViewBag.AssetId
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No status history found for this asset.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Old Status</th>
+                <th>New Status</th>
+                <th>Changed At</th>
+                <th>Changed By</th>
+                <th>Reason</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var history in Model)
+            {
+                <tr>
+                    <td>@history.OldStatus</td>
+                    <td>@history.NewStatus</td>
+                    <td>@history.ChangedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
+                    <td>@history.ChangedByUserId</td>
+                    <td>@history.Reason</td>
+                    <td>@history.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
