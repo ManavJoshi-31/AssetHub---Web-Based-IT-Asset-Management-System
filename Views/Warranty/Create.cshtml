@@ -1,0 +1,90 @@
+﻿@model AssetHub.ViewModels.WarrantyViewModel
+
+@{
+    ViewData["Title"] = "Create Warranty";
+}
+
+<h1>Create Warranty</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="AssetId" class="form-label"></label>
+        <select asp-for="AssetId"
+                asp-items="ViewBag.Assets"
+                class="form-select">
+            <option value="">-- Select Asset --</option>
+        </select>
+        <span asp-validation-for="AssetId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="WarrantyType" class="form-label"></label>
+        <select asp-for="WarrantyType"
+                asp-items="Html.GetEnumSelectList<AssetHub.Models.Enums.WarrantyType>()"
+                class="form-select">
+            <option value="">-- Select Warranty Type --</option>
+        </select>
+        <span asp-validation-for="WarrantyType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        <input asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Provider" class="form-label"></label>
+        <input asp-for="Provider" class="form-control" />
+        <span asp-validation-for="Provider" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="WarrantyNumber" class="form-label"></label>
+        <input asp-for="WarrantyNumber" class="form-control" />
+        <span asp-validation-for="WarrantyNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TermsAndConditions" class="form-label"></label>
+        <textarea asp-for="TermsAndConditions"
+                  class="form-control"
+                  rows="4"></textarea>
+        <span asp-validation-for="TermsAndConditions" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes"
+                  class="form-control"
+                  rows="3"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Create Warranty
+    </button>
+</form>
+
+@section Scripts {  
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
